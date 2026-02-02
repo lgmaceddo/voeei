@@ -180,19 +180,40 @@ export const MOCK_PLANS: Plan[] = [
     id: 'monthly',
     name: 'Plano Mensal',
     price: '49,90',
-    description: 'Acesso completo por 30 dias.'
+    description: 'Acesso completo por 30 dias.',
+    duration: '30 Dias',
+    features: [
+      'Simulados Ilimitados',
+      'Banco de Questões ANAC',
+      'Estatísticas de Desempenho',
+      'Suporte via E-mail'
+    ]
   },
   {
     id: 'bimestral',
     name: 'Plano Bimestral',
     price: '79,90',
-    description: 'Acesso completo por 60 dias.'
+    description: 'Acesso completo por 60 dias.',
+    duration: '60 Dias',
+    features: [
+      'Tudo do Plano Mensal',
+      'Materiais de Apoio PDF',
+      'Simulados SHL/Lógica',
+      'Ranking de Alunos'
+    ]
   },
   {
     id: 'trimestral',
     name: 'Plano Trimestral',
     price: '99,90',
-    description: 'Acesso completo por 90 dias.'
+    description: 'Acesso completo por 90 dias.',
+    duration: '90 Dias',
+    features: [
+      'Tudo do Plano Bimestral',
+      'Prioridade no Suporte',
+      'Módulos de Português',
+      'Certificado de Conclusão'
+    ]
   }
 ];
 

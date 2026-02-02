@@ -57,6 +57,8 @@ export interface Plan {
   name: string;
   price: string;
   description: string;
+  duration: string;
+  features: string[];
 }
 
 export interface ExamResult {

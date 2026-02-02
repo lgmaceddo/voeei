@@ -160,7 +160,7 @@ const Dashboard: React.FC<DashboardProps> = ({ user, onNavigate }) => {
                       width={50}
                     />
                     <Tooltip cursor={{ fill: 'transparent' }} content={<CustomTooltip />} />
-                    <Bar dataKey="score" radius={[0, 6, 6, 0]} barSize={24} background={{ fill: '#f1f5f9', radius: [0, 6, 6, 0] }}>
+                    <Bar dataKey="score" radius={[0, 6, 6, 0]} barSize={24} background={{ fill: '#f1f5f9', radius: 6 }}>
                       {performanceData.map((entry, index) => (
                         <Cell key={`cell-${index}`} fill={entry.color} />
                       ))}
