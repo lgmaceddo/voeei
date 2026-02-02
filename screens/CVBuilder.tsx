@@ -6,7 +6,6 @@ import {
   User as UserIcon, Briefcase, GraduationCap, Sparkles, LayoutTemplate, MapPin, Mail, Phone, Linkedin, Globe, Check, Camera, Upload, X, Plane, Eye, RefreshCw, Loader2
 } from 'lucide-react';
 import { Button } from '../components/ui/Button';
-import { extractDataFromCV } from '../services/geminiService';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
 
@@ -162,7 +161,6 @@ const CVBuilder: React.FC<CVBuilderProps> = ({ user, onBack }) => {
   const [currentStep, setCurrentStep] = useState(1);
   const [selectedTemplate, setSelectedTemplate] = useState<'modern' | 'classic' | 'minimal'>('minimal');
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
-  const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [isGeneratingPDF, setIsGeneratingPDF] = useState(false);
   const cvRef = useRef<HTMLDivElement>(null);
 
@@ -267,46 +265,6 @@ const CVBuilder: React.FC<CVBuilderProps> = ({ user, onBack }) => {
     setCvData(prev => ({ ...prev, photo: '' }));
   };
 
-  const handlePdfUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-
-    if (file.type !== 'application/pdf') {
-      alert("Por favor, selecione um arquivo PDF.");
-      return;
-    }
-
-    setIsAnalyzing(true);
-
-    try {
-      const reader = new FileReader();
-      reader.onloadend = async () => {
-        const base64String = (reader.result as string).split(',')[1];
-
-        try {
-          const extractedData = await extractDataFromCV(base64String);
-          setCvData(prev => {
-            const newData = { ...prev, ...extractedData };
-            if (prev.photo) newData.photo = prev.photo;
-            const ensureIds = (arr: any[]) => arr ? arr.map((item: any) => ({ ...item, id: item.id || Date.now().toString() + Math.random() })) : [];
-            newData.experiences = ensureIds(newData.experiences);
-            newData.education = ensureIds(newData.education);
-            newData.extraCourses = ensureIds(newData.extraCourses);
-            return newData;
-          });
-          alert("Dados importados com sucesso! Verifique e edite conforme necessário.");
-        } catch (error) {
-          console.error(error);
-          alert("Ocorreu um erro ao processar o PDF. Tente novamente.");
-        } finally {
-          setIsAnalyzing(false);
-        }
-      };
-      reader.readAsDataURL(file);
-    } catch (e) {
-      setIsAnalyzing(false);
-    }
-  };
 
   const addExperience = () => {
     const newExp: Experience = {
@@ -555,7 +513,6 @@ const CVBuilder: React.FC<CVBuilderProps> = ({ user, onBack }) => {
   return (
     <>
       <style>{`@media print { @page { margin: 0; size: 210mm 297mm; } body * { visibility: hidden; } #cv-print-area, #cv-print-area * { visibility: visible; } #cv-print-area { position: absolute; left: 0; top: 0; width: 100%; margin: 0; padding: 0; background: white; min-height: 100vh; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; } nav, aside, button, header { display: none !important; } }`}</style>
-      {isAnalyzing && (<div className="fixed inset-0 z-[80] bg-slate-900/70 backdrop-blur-sm flex items-center justify-center animate-fade-in"><div className="bg-white p-8 rounded-3xl shadow-2xl flex flex-col items-center gap-4 text-center max-w-sm"><div className="relative"><div className="w-16 h-16 rounded-full border-4 border-slate-100 border-t-indigo-600 animate-spin"></div><div className="absolute inset-0 flex items-center justify-center"><Sparkles className="w-6 h-6 text-indigo-600" /></div></div><div><h3 className="text-xl font-bold text-slate-800">Analisando PDF</h3><p className="text-slate-500 mt-2">A IA está lendo seu currículo...</p></div></div></div>)}
 
       {/* PDF Generation Overlay */}
       {isGeneratingPDF && (
@@ -596,12 +553,6 @@ const CVBuilder: React.FC<CVBuilderProps> = ({ user, onBack }) => {
             </div>
           </div>
           <div className="flex gap-2">
-            <div className="relative">
-              <input type="file" accept=".pdf" onChange={handlePdfUpload} className="absolute inset-0 w-full h-full opacity-0 cursor-pointer" />
-              <Button className="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white shadow-lg shadow-indigo-200" title="Importar PDF via IA">
-                <Sparkles className="w-4 h-4 mr-2" /> Importar PDF
-              </Button>
-            </div>
             <Button onClick={handleClearData} variant="ghost" className="text-rose-500 hover:bg-rose-50 px-2" title="Limpar Tudo">
               <Trash2 className="w-5 h-5" />
             </Button>

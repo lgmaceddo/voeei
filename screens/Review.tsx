@@ -12,8 +12,6 @@ interface ReviewProps {
 
 const Review: React.FC<ReviewProps> = ({ questions, userAnswers, onClose }) => {
     const [currentIndex, setCurrentIndex] = useState(0);
-    const [aiExplanation, setAiExplanation] = useState<string | null>(null);
-    const [loadingAI, setLoadingAI] = useState(false);
 
     const currentQuestion = questions[currentIndex];
     const selectedIndex = userAnswers[currentQuestion.id];
@@ -21,24 +19,16 @@ const Review: React.FC<ReviewProps> = ({ questions, userAnswers, onClose }) => {
 
     const handleNext = () => {
         if (currentIndex < questions.length - 1) {
-            setAiExplanation(null);
             setCurrentIndex(prev => prev + 1);
         }
     };
 
     const handlePrev = () => {
         if (currentIndex > 0) {
-            setAiExplanation(null);
             setCurrentIndex(prev => prev - 1);
         }
     };
 
-    const handleAskAI = async () => {
-        setLoadingAI(true);
-        const text = await getAIExplanation(currentQuestion);
-        setAiExplanation(text);
-        setLoadingAI(false);
-    };
 
     return (
         <div className="max-w-3xl mx-auto space-y-6 pb-20">
@@ -91,28 +81,6 @@ const Review: React.FC<ReviewProps> = ({ questions, userAnswers, onClose }) => {
                         {currentQuestion.explanation}
                     </p>
 
-                    {/* AI Feature */}
-                    <div className="mt-6 pt-6 border-t border-slate-200">
-                        {!aiExplanation ? (
-                            <button
-                                onClick={handleAskAI}
-                                disabled={loadingAI}
-                                className="flex items-center gap-2 text-primary-600 text-sm font-medium hover:text-primary-700 transition-colors"
-                            >
-                                <Sparkles className="w-4 h-4" />
-                                {loadingAI ? 'Gerando explicação...' : 'Pedir explicação detalhada para IA'}
-                            </button>
-                        ) : (
-                            <div className="animate-fade-in">
-                                <h4 className="font-bold text-primary-600 mb-2 flex items-center gap-2 text-sm">
-                                    <Sparkles className="w-4 h-4" /> Tutor IA
-                                </h4>
-                                <p className="text-slate-700 text-sm leading-relaxed whitespace-pre-wrap">
-                                    {aiExplanation}
-                                </p>
-                            </div>
-                        )}
-                    </div>
                 </div>
             </div>
 
