@@ -1,0 +1,5 @@
+{
+  "name": "VOOEI Portal de Simulados",
+  "description": "A modern, minimalist portal for Flight Attendant mock exams (ANAC). Features study dashboards, timed simulations, and AI-powered question explanations.",
+  "requestFramePermissions": []
+}
