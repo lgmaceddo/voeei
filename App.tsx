@@ -12,9 +12,13 @@ import Profile from './screens/Profile';
 import ExamDetails from './screens/ExamDetails';
 import CVBuilder from './screens/CVBuilder';
 import Achievements from './screens/Achievements';
+import UsefulLinks from './screens/UsefulLinks';
+import DeductiveLanding from './screens/DeductiveLanding';
+import DeductiveSession from './screens/DeductiveSession';
+import DeductiveResults from './screens/DeductiveResults';
 import AdminPanel from './screens/AdminPanel';
 import { Sidebar } from './components/layout/Sidebar';
-import { MOCK_USER, MOCK_QUESTIONS, MOCK_EXAM_HISTORY, EXAM_CATEGORIES, MOCK_PLANS } from './constants';
+import { MOCK_USER, MOCK_QUESTIONS, MOCK_EXAM_HISTORY, EXAM_CATEGORIES, MOCK_PLANS, INITIAL_LINKS, INITIAL_FEATURES } from './constants';
 import { Menu } from 'lucide-react';
 import { Toast, ToastType } from './components/ui/Toast';
 import { MobileHeader } from './components/layout/MobileHeader';
@@ -41,6 +45,12 @@ const App: React.FC = () => {
   // Favorites State
   const [favorites, setFavorites] = useState<number[]>([1, 4]);
 
+  // Links State
+  const [usefulLinks, setUsefulLinks] = useState(INITIAL_LINKS);
+
+  // Features State
+  const [features, setFeatures] = useState(INITIAL_FEATURES);
+
   // Toast State
   const [toast, setToast] = useState<{ message: string; type: ToastType; isVisible: boolean }>({
     message: '',
@@ -51,6 +61,11 @@ const App: React.FC = () => {
   // Exam Context (Normal vs Favorites Only vs Resumed)
   const [isFavoritesExam, setIsFavoritesExam] = useState(false);
   const [initialSessionState, setInitialSessionState] = useState<SavedExamState | null>(null);
+
+  // Deductive State
+  const [deductiveMode, setDeductiveMode] = useState<'TRAINING' | 'SIMULATION' | null>(null);
+  const [deductiveAnswers, setDeductiveAnswers] = useState<Record<number, string>>({});
+  const [deductiveTimeTaken, setDeductiveTimeTaken] = useState(0);
 
   // --- Handlers ---
 
@@ -85,8 +100,11 @@ const App: React.FC = () => {
 
   const handleSelectCategory = (category: ExamCategory) => {
     setSelectedCategory(category);
-    // Go to Details first instead of session
-    setCurrentView('EXAM_DETAILS');
+    if (category.id === 'SHL-DEDUCTIVE') {
+      setCurrentView('DEDUCTIVE_REASONING');
+    } else {
+      setCurrentView('EXAM_DETAILS');
+    }
   };
 
   const handleStartExam = (category: ExamCategory, favoritesOnly: boolean = false) => {
@@ -202,6 +220,17 @@ const App: React.FC = () => {
     setCurrentView('RESULTS');
   };
 
+  const handleDeductiveComplete = (answers: Record<number, string>, timeTakenSeconds: number) => {
+    if (!selectedCategory) return;
+
+    // For now, we'll just show a success message since results are complex for deductive
+    // In a real app, we'd calculate the correct rooms/order and show a Results screen
+    setDeductiveAnswers(answers);
+    setDeductiveTimeTaken(timeTakenSeconds);
+    showToast('Teste finalizado! Sua performance foi registrada.', 'success');
+    setCurrentView('DEDUCTIVE_RESULTS');
+  };
+
   const handleRetry = () => {
     setCurrentAnswers({});
     setInitialSessionState(null);
@@ -222,9 +251,19 @@ const App: React.FC = () => {
     });
   };
 
-  const handleUpdatePlans = (newPlans: any[]) => {
+  const handleUpdatePlans = (newPlans: Plan[]) => {
     setPlans(newPlans);
     showToast('Preços atualizados com sucesso!', 'success');
+  };
+
+  const handleUpdateLinks = (newLinks: any[]) => {
+    setUsefulLinks(newLinks);
+    showToast('Links atualizados com sucesso!', 'success');
+  };
+
+  const handleUpdateFeatures = (newFeatures: any[]) => {
+    setFeatures(newFeatures);
+    showToast('Recursos atualizados com sucesso!', 'success');
   };
 
   // --- Render Helpers ---
@@ -279,6 +318,36 @@ const App: React.FC = () => {
           />
         );
 
+      case 'DEDUCTIVE_SESSION':
+        if (!selectedCategory) return null;
+        const deductiveQs = MOCK_QUESTIONS.filter(q => q.category === 'SHL-DEDUCTIVE');
+        return (
+          <DeductiveSession
+            category={selectedCategory}
+            questions={deductiveQs}
+            mode={deductiveMode || 'TRAINING'}
+            onComplete={handleDeductiveComplete}
+            onCancel={() => setCurrentView('DEDUCTIVE_REASONING')}
+          />
+        );
+
+      case 'DEDUCTIVE_RESULTS':
+        if (!selectedCategory) return null;
+        const resultQs = MOCK_QUESTIONS.filter(q => q.category === 'SHL-DEDUCTIVE');
+        return (
+          <DeductiveResults
+            category={selectedCategory}
+            questions={resultQs}
+            answers={deductiveAnswers}
+            timeTaken={deductiveTimeTaken}
+            onHome={() => setCurrentView('DASHBOARD')}
+            onRetry={() => {
+              setDeductiveAnswers({});
+              setCurrentView('DEDUCTIVE_SESSION');
+            }}
+          />
+        );
+
       case 'RESULTS':
         if (!lastExamResult || !selectedCategory) return null;
 
@@ -325,12 +394,37 @@ const App: React.FC = () => {
       case 'ACHIEVEMENTS':
         return user ? <Achievements user={user} onBack={() => setCurrentView('DASHBOARD')} /> : null;
 
+      case 'USEFUL_LINKS':
+        return <UsefulLinks links={usefulLinks} onBack={() => setCurrentView('DASHBOARD')} />;
+
+      case 'DEDUCTIVE_REASONING':
+        if (!selectedCategory) return null;
+        return (
+          <DeductiveLanding
+            category={selectedCategory}
+            onBack={() => setCurrentView('EXAM_LIST')}
+            onStart={(mode) => {
+              setDeductiveMode(mode);
+              setCurrentView('DEDUCTIVE_SESSION');
+            }}
+          />
+        );
+
       case 'ADMIN':
-        return user ? <AdminPanel user={user} plans={plans} onUpdatePlans={handleUpdatePlans} /> : null;
+        return user ? <AdminPanel
+          user={user}
+          plans={plans}
+          onUpdatePlans={handleUpdatePlans}
+          links={usefulLinks}
+          onUpdateLinks={handleUpdateLinks}
+          features={features}
+          onUpdateFeatures={handleUpdateFeatures}
+        /> : null;
 
       case 'LANDING':
         return <LandingPage
           plans={plans}
+          features={features}
           onLoginClick={(mode) => {
             if (mode) setLoginMode(mode);
             setCurrentView('LOGIN');

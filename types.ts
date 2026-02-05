@@ -11,7 +11,27 @@ export type ViewState =
   | 'PROFILE'
   | 'CV_BUILDER'
   | 'ACHIEVEMENTS'
+  | 'USEFUL_LINKS'
+  | 'DEDUCTIVE_REASONING'
+  | 'DEDUCTIVE_SESSION'
+  | 'DEDUCTIVE_RESULTS'
   | 'ADMIN';
+
+export interface Feature {
+  id: string;
+  title: string;
+  description: string;
+  icon: 'BookOpen' | 'Target' | 'TrendingUp' | 'Star' | 'Brain' | 'FileText';
+  badge?: string;
+}
+
+export interface UsefulLink {
+  id: string;
+  title: string;
+  url: string;
+  description: string;
+  category: string;
+}
 
 export interface Achievement {
   id: string;
@@ -34,13 +54,21 @@ export interface User {
   achievements?: string[]; // IDs of earned achievements
 }
 
+export interface DeductiveChallenge {
+  type: 'OFFICES' | 'CALENDAR' | 'SEATING' | 'SCHEDULING';
+  scenario: string;
+  rules: string[];
+  data: any; // Complex data based on puzzle type
+}
+
 export interface Question {
   id: number;
-  text: string;
+  text?: string;
   options: string[];
-  correctIndex: number; // 0-3
+  correctIndex: number; // 0-3 for multiple choice, or logic for deductive
   explanation: string;
   category: string;
+  deductive?: DeductiveChallenge;
 }
 
 export interface ExamCategory {

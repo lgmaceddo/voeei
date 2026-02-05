@@ -7,29 +7,44 @@ import {
     CreditCard,
     Shield,
     Layers,
-    Users as UsersIcon
+    Users as UsersIcon,
+    Star
 } from 'lucide-react';
-import { User, Plan } from '../types';
+import { User, Plan, UsefulLink, Feature } from '../types';
 import { QuestionsManager } from './admin/QuestionsManager';
 import { UsersManager } from './admin/UsersManager';
 import { PlansManager } from './admin/PlansManager';
 import { RankingManager } from './admin/RankingManager';
 import { LinksManager } from './admin/LinksManager';
+import { FeaturesManager } from './admin/FeaturesManager';
 import { StripeManager } from './admin/StripeManager';
 
 interface AdminPanelProps {
     user: User;
     plans: Plan[];
     onUpdatePlans: (newPlans: Plan[]) => void;
+    links: UsefulLink[];
+    onUpdateLinks: (newLinks: UsefulLink[]) => void;
+    features: Feature[];
+    onUpdateFeatures: (newFeatures: Feature[]) => void;
 }
 
-const AdminPanel: React.FC<AdminPanelProps> = ({ user, plans, onUpdatePlans }) => {
-    const [activeTab, setActiveTab] = useState<'QUESTIONS' | 'USERS' | 'PLANS' | 'RANKING' | 'LINKS' | 'STRIPE'>('QUESTIONS');
+const AdminPanel: React.FC<AdminPanelProps> = ({
+    user,
+    plans,
+    onUpdatePlans,
+    links,
+    onUpdateLinks,
+    features,
+    onUpdateFeatures
+}) => {
+    const [activeTab, setActiveTab] = useState<'QUESTIONS' | 'USERS' | 'PLANS' | 'FEATURES' | 'RANKING' | 'LINKS' | 'STRIPE'>('QUESTIONS');
 
     const tabs = [
         { id: 'QUESTIONS', label: 'Questões', icon: BookOpen },
         { id: 'USERS', label: 'Usuários', icon: UsersIcon },
-        { id: 'PLANS', label: 'Planos', icon: Layers },
+        { id: 'PLANS', label: 'Assinaturas', icon: Layers },
+        { id: 'FEATURES', label: 'Recursos', icon: Star },
         { id: 'RANKING', label: 'Ranking', icon: Trophy },
         { id: 'LINKS', label: 'Links Úteis', icon: LinkIcon },
         { id: 'STRIPE', label: 'Pagamentos', icon: CreditCard },
@@ -81,8 +96,9 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ user, plans, onUpdatePlans }) =
                 {activeTab === 'QUESTIONS' && <QuestionsManager />}
                 {activeTab === 'USERS' && <UsersManager />}
                 {activeTab === 'PLANS' && <PlansManager plans={plans} onUpdatePlans={onUpdatePlans} />}
+                {activeTab === 'FEATURES' && <FeaturesManager features={features} onUpdateFeatures={onUpdateFeatures} />}
                 {activeTab === 'RANKING' && <RankingManager />}
-                {activeTab === 'LINKS' && <LinksManager />}
+                {activeTab === 'LINKS' && <LinksManager links={links} onUpdateLinks={onUpdateLinks} />}
                 {activeTab === 'STRIPE' && <StripeManager />}
             </div>
         </div>

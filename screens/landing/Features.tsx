@@ -1,8 +1,31 @@
 
 import React from 'react';
 import { BookOpen, Target, TrendingUp, Star, Brain, FileText } from 'lucide-react';
+import { Feature } from '../../types';
 
-export const Features = () => {
+const ICON_MAP = {
+    BookOpen: BookOpen,
+    Target: Target,
+    TrendingUp: TrendingUp,
+    Star: Star,
+    Brain: Brain,
+    FileText: FileText
+};
+
+const COLOR_MAP = {
+    BookOpen: { bg: 'bg-blue-50', icon: 'text-blue-500' },
+    Target: { bg: 'bg-orange-50', icon: 'text-orange-500' },
+    TrendingUp: { bg: 'bg-blue-50/50', icon: 'text-blue-400' },
+    Star: { bg: 'bg-orange-50/50', icon: 'text-orange-400' },
+    Brain: { bg: 'bg-blue-50', icon: 'text-blue-500' },
+    FileText: { bg: 'bg-orange-50', icon: 'text-orange-500' },
+};
+
+interface FeaturesProps {
+    features: Feature[];
+}
+
+export const Features: React.FC<FeaturesProps> = ({ features }) => {
     return (
         <section id="recursos" className="py-24 px-4 bg-[#F8FAFC]">
             <div className="max-w-7xl mx-auto">
@@ -16,43 +39,20 @@ export const Features = () => {
                     </p>
                 </div>
                 <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-                    <FeatureCard
-                        icon={<BookOpen className="w-6 h-6 text-blue-500" />}
-                        iconBg="bg-blue-50"
-                        title="Simulados Oficiais ANAC"
-                        description="Questões atualizadas dos blocos ESS, RPA/SAC, PSS/Fatores Humanos e CGA."
-                    />
-                    <FeatureCard
-                        icon={<Target className="w-6 h-6 text-orange-500" />}
-                        iconBg="bg-orange-50"
-                        title="Pré-Banca Realista"
-                        description="80 questões em 4 blocos com regras oficiais de aprovação e 2ª época."
-                        badge="Disponível no Plano Trimestral"
-                    />
-                    <FeatureCard
-                        icon={<TrendingUp className="w-6 h-6 text-blue-400" />}
-                        iconBg="bg-blue-50/50"
-                        title="Histórico de Desempenho"
-                        description="Acompanhe sua evolução com gráficos e métricas detalhadas por matéria."
-                    />
-                    <FeatureCard
-                        icon={<Star className="w-6 h-6 text-orange-400" />}
-                        iconBg="bg-orange-50/50"
-                        title="Questões Favoritas"
-                        description="Marque questões importantes e crie seu banco de estudos personalizado."
-                    />
-                    <FeatureCard
-                        icon={<Brain className="w-6 h-6 text-blue-500" />}
-                        iconBg="bg-blue-50"
-                        title="Raciocínio Lógico"
-                        description="Treine com questões específicas em nosso simulador focado em lógica."
-                    />
-                    <FeatureCard
-                        icon={<FileText className="w-6 h-6 text-orange-500" />}
-                        iconBg="bg-orange-50"
-                        title="Criador de Currículos"
-                        description="Monte seu currículo profissional para processos seletivos em companhias aéreas."
-                    />
+                    {features.map((feature) => {
+                        const IconComponent = ICON_MAP[feature.icon];
+                        const colors = COLOR_MAP[feature.icon];
+                        return (
+                            <FeatureCard
+                                key={feature.id}
+                                icon={<IconComponent className={`w-6 h-6 ${colors.icon}`} />}
+                                iconBg={colors.bg}
+                                title={feature.title}
+                                description={feature.description}
+                                badge={feature.badge}
+                            />
+                        );
+                    })}
                 </div>
             </div>
         </section>
@@ -65,8 +65,11 @@ const FeatureCard = ({ icon, title, description, iconBg, badge }: any) => (
             {icon}
         </div>
         {badge && (
-            <div className="absolute top-4 right-4 bg-orange-100 text-orange-600 text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-tighter">
-                {badge}
+            <div className="absolute top-0 right-10 bg-navy-900 text-white text-[10px] font-black px-4 py-2.5 rounded-b-2xl shadow-xl shadow-navy-900/20 border-x border-b border-white/5 uppercase tracking-widest animate-fade-in">
+                <div className="flex items-center gap-2">
+                    <div className="w-1 h-1 rounded-full bg-blue-400"></div>
+                    {badge}
+                </div>
             </div>
         )}
         <h3 className="text-xl font-black text-navy-900 mb-4 tracking-tight">{title}</h3>

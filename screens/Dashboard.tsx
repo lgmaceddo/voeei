@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { User } from '../types';
-import { BookOpen, BrainCircuit, Plane, ArrowRight, Cloud, Star, Clock, TrendingUp, Activity, Trophy } from 'lucide-react';
+import { BookOpen, BrainCircuit, Plane, ArrowRight, Cloud, Star, Clock, TrendingUp, Activity, Trophy, Link as LinkIcon } from 'lucide-react';
 import { DashboardCard } from '../components/ui/DashboardCard';
 import { StatCard } from '../components/ui/StatCard';
 import {
@@ -122,6 +122,14 @@ const Dashboard: React.FC<DashboardProps> = ({ user, onNavigate }) => {
             bgIcon={<BrainCircuit />}
             buttonText="Resolver testes"
             onClick={() => onNavigate('EXAM_LIST', 'SHL')}
+          />
+          <DashboardCard
+            title="Links Úteis ANAC"
+            description="Consulta de licenças, extratos de exames e CMA oficial."
+            icon={<LinkIcon />}
+            bgIcon={<LinkIcon />}
+            buttonText="Acessar Links"
+            onClick={() => onNavigate('USEFUL_LINKS')}
           />
         </div>
 

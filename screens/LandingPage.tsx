@@ -13,15 +13,16 @@ import { Footer } from './landing/Footer';
 interface LandingPageProps {
     onLoginClick: (mode?: 'LOGIN' | 'SIGNUP') => void;
     plans: Plan[];
+    features: any[];
 }
 
-const LandingPage: React.FC<LandingPageProps> = ({ onLoginClick, plans }) => {
+const LandingPage: React.FC<LandingPageProps> = ({ onLoginClick, plans, features }) => {
     return (
         <div className="min-h-screen bg-[#F8FAFC] selection:bg-primary-100 selection:text-primary-700 font-sans">
             <Navbar onLoginClick={onLoginClick} />
             <main>
                 <Hero onLoginClick={onLoginClick} />
-                <Features />
+                <Features features={features} />
                 <ANACBlocks />
                 <Pricing plans={plans} onLoginClick={onLoginClick} />
                 <Testimonials />

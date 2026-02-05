@@ -12,7 +12,8 @@ import {
   Menu,
   FileText,
   Shield,
-  Trophy
+  Trophy,
+  Link as LinkIcon
 } from 'lucide-react';
 
 interface SidebarProps {
@@ -118,6 +119,11 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 icon={Trophy}
                 label="Conquistas"
                 view="ACHIEVEMENTS"
+              />
+              <NavItem
+                icon={LinkIcon}
+                label="Links Úteis ANAC"
+                view="USEFUL_LINKS"
               />
             </div>
           </div>
