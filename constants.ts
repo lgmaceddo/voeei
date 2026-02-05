@@ -968,6 +968,31 @@ export const MOCK_QUESTIONS: Question[] = [
         duration: 2 // 1 hour
       }
     }
+  },
+  {
+    id: 321,
+    category: 'SHL-DEDUCTIVE',
+    options: ['8:00,8:30'],
+    correctIndex: 0,
+    explanation: 'Dedução com Conflito Oculto: 1. A reunião de 45 minutos requer 2 slots de 30 min (1 hora total de disponibilidade comum). 2. Aline está livre de 08:00-10:00, 13:00-14:00 e 16:00-18:00. 3. Nina tinha janelas livres às 08:00 e 14:00, mas sua reunião das 11:00-13:00 foi estendida até 13:30, o que bloqueia qualquer tentativa de início imediato após as 13:00. 4. Cruzando os horários com a sua agenda (Você), o único bloco de 1 hora onde Aline, Nina e você estão simultaneamente livres é das 08:00 às 09:00.',
+    deductive: {
+      type: 'TEAM_CALENDAR',
+      scenario: 'Gestão de Prioridades',
+      rules: [
+        'Considerando que a reunião da Nina das 11–13 foi estendida em 30 minutos, agende uma reunião de 45 minutos com Aline e Nina.'
+      ],
+      data: {
+        team: [
+          { name: 'Aline', busy: [4, 5, 6, 7, 8, 9, 12, 13, 14, 15] },
+          { name: 'Caio', busy: [0, 1, 6, 7, 10, 11, 12, 13, 18, 19] },
+          { name: 'Nina', busy: [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 16, 17, 18, 19] },
+          { name: 'Otávio', busy: [0, 1, 2, 3, 8, 9, 14, 15] }
+        ],
+        myBusy: [4, 5, 8, 9, 10, 11, 16, 17],
+        hours: ['8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18'],
+        duration: 2
+      }
+    }
   }
 ];
 
