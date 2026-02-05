@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { ViewState, User, ExamCategory, ExamResult, ExamHistoryItem, SavedExamState, Plan } from './types';
+import { ViewState, User, ExamCategory, ExamResult, ExamHistoryItem, SavedExamState, Plan, Question } from './types';
 import LandingPage from './screens/LandingPage';
 import Login from './screens/Login';
 import Dashboard from './screens/Dashboard';
@@ -64,6 +64,8 @@ const App: React.FC = () => {
 
   // Deductive State
   const [deductiveMode, setDeductiveMode] = useState<'TRAINING' | 'SIMULATION' | null>(null);
+  const [deductiveSubcategory, setDeductiveSubcategory] = useState<string | undefined>(undefined);
+  const [activeDeductiveQuestions, setActiveDeductiveQuestions] = useState<Question[]>([]);
   const [deductiveAnswers, setDeductiveAnswers] = useState<Record<number, string>>({});
   const [deductiveTimeTaken, setDeductiveTimeTaken] = useState(0);
 
@@ -324,23 +326,29 @@ const App: React.FC = () => {
         return (
           <DeductiveSession
             category={selectedCategory}
-            questions={deductiveQs}
+            questions={activeDeductiveQuestions}
             mode={deductiveMode || 'TRAINING'}
+            subcategory={deductiveSubcategory}
             onComplete={handleDeductiveComplete}
-            onCancel={() => setCurrentView('DEDUCTIVE_REASONING')}
+            onCancel={() => {
+              setActiveDeductiveQuestions([]);
+              setCurrentView('DEDUCTIVE_REASONING');
+            }}
           />
         );
 
       case 'DEDUCTIVE_RESULTS':
         if (!selectedCategory) return null;
-        const resultQs = MOCK_QUESTIONS.filter(q => q.category === 'SHL-DEDUCTIVE');
         return (
           <DeductiveResults
             category={selectedCategory}
-            questions={resultQs}
+            questions={activeDeductiveQuestions}
             answers={deductiveAnswers}
             timeTaken={deductiveTimeTaken}
-            onHome={() => setCurrentView('DASHBOARD')}
+            onHome={() => {
+              setActiveDeductiveQuestions([]);
+              setCurrentView('DASHBOARD');
+            }}
             onRetry={() => {
               setDeductiveAnswers({});
               setCurrentView('DEDUCTIVE_SESSION');
@@ -403,8 +411,26 @@ const App: React.FC = () => {
           <DeductiveLanding
             category={selectedCategory}
             onBack={() => setCurrentView('EXAM_LIST')}
-            onStart={(mode) => {
+            onStart={(mode, sub) => {
+              const allDeductive = MOCK_QUESTIONS.filter(q => q.category === 'SHL-DEDUCTIVE');
+              let filtered = allDeductive;
+
+              if (mode === 'TRAINING' && sub) {
+                filtered = allDeductive.filter(q => {
+                  const type = q.deductive?.type;
+                  if (sub === 'CALENDAR') return type === 'CALENDAR';
+                  if (sub === 'SCHEDULING') return type === 'SCHEDULING';
+                  if (sub === 'TEAM_CALENDAR') return type === 'TEAM_CALENDAR';
+                  if (sub === 'SPATIAL') return type === 'OFFICES' || type === 'SEATING';
+                  return true;
+                });
+              } else if (mode === 'SIMULATION') {
+                filtered = [...allDeductive].sort(() => Math.random() - 0.5).slice(0, 12);
+              }
+
               setDeductiveMode(mode);
+              setDeductiveSubcategory(sub);
+              setActiveDeductiveQuestions(filtered);
               setCurrentView('DEDUCTIVE_SESSION');
             }}
           />

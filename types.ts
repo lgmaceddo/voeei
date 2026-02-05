@@ -55,7 +55,7 @@ export interface User {
 }
 
 export interface DeductiveChallenge {
-  type: 'OFFICES' | 'CALENDAR' | 'SEATING' | 'SCHEDULING';
+  type: 'OFFICES' | 'CALENDAR' | 'SEATING' | 'SCHEDULING' | 'TEAM_CALENDAR';
   scenario: string;
   rules: string[];
   data: any; // Complex data based on puzzle type

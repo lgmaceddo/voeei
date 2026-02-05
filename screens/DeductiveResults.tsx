@@ -4,6 +4,8 @@ import { ExamCategory, Question, ExamResult } from '../types';
 import { DeductiveOffice } from '../components/shl/DeductiveOffice';
 import { DeductiveCalendar } from '../components/shl/DeductiveCalendar';
 import { DeductiveSeating } from '../components/shl/DeductiveSeating';
+import { DeductiveTeamCalendar } from '../components/shl/DeductiveTeamCalendar';
+import { DeductiveScheduling } from '../components/shl/DeductiveScheduling';
 
 // Standard Results Components
 import { PerformanceHeader } from './results/PerformanceHeader';
@@ -25,7 +27,42 @@ const DeductiveResults: React.FC<DeductiveResultsProps> = ({ category, questions
     const calculateScore = () => {
         let correct = 0;
         questions.forEach(q => {
-            if (answers[q.id] === q.options[q.correctIndex]) {
+            const val = answers[q.id];
+            if (val === undefined) return;
+
+            const type = q.deductive?.type;
+            const correctVal = q.options[q.correctIndex];
+
+            if (type === 'CALENDAR') {
+                if (q.deductive?.data?.multiSelect) {
+                    if (val === correctVal) correct++;
+                } else {
+                    if (`Dia ${val}` === correctVal) correct++;
+                }
+            } else if (type === 'TEAM_CALENDAR') {
+                if (val === correctVal) correct++;
+            } else if (type === 'OFFICES') {
+                const sortedVal = val.split(',').sort().join(',');
+                let solution = "";
+                if (q.id === 302) solution = "Daniela:3,Edward:1,Fei:4,George:5,Helen:2";
+                else if (q.id === 310) solution = "Andrew:5,Beatrice:3,Corrine:2,David:4,Erica:1";
+                else if (q.id === 313) solution = "Alpha:5,Beta:4,Delta:1,Epsilon:3,Gamma:2";
+                if (sortedVal === solution) correct++;
+            } else if (type === 'SEATING') {
+                const sortedVal = val.split(',').sort().join(',');
+                let solution = "";
+                if (q.id === 303) solution = "Ken:6,Linda:1,Mike:5,Naomi:2,Oscar:3,Petra:4";
+                else if (q.id === 312) solution = "Alice:1,Bob:5,Charlie:2,Diana:3,Eve:4,Frank:6";
+                if (sortedVal === solution) correct++;
+            } else if (type === 'SCHEDULING') {
+                const pairs = val.split(',').sort().join(',');
+                let solution = "";
+                if (q.id === 304) solution = "t1:14,t2:10,t3:3,t4:5";
+                else if (q.id === 308) solution = "t1:12,t2:3,t3:1,t4:7";
+                else if (q.id === 309) solution = "t1:0,t2:7,t3:9,t4:14";
+                else if (q.id === 314) solution = "t1:0,t2:3,t3:9,t4:15";
+                if (pairs === solution) correct++;
+            } else if (val === correctVal) {
                 correct++;
             }
         });
@@ -41,7 +78,42 @@ const DeductiveResults: React.FC<DeductiveResultsProps> = ({ category, questions
     const mappedAnswers: Record<number, number> = {};
     questions.forEach((q) => {
         if (answers[q.id] !== undefined) {
-            mappedAnswers[q.id] = answers[q.id] === q.options[q.correctIndex] ? q.correctIndex : -1;
+            const val = answers[q.id];
+            const type = q.deductive?.type;
+            const correctVal = q.options[q.correctIndex];
+
+            if (type === 'CALENDAR') {
+                if (q.deductive?.data?.multiSelect) {
+                    mappedAnswers[q.id] = val === correctVal ? q.correctIndex : -1;
+                } else {
+                    mappedAnswers[q.id] = `Dia ${val}` === correctVal ? q.correctIndex : -1;
+                }
+            } else if (type === 'TEAM_CALENDAR') {
+                mappedAnswers[q.id] = val === correctVal ? q.correctIndex : -1;
+            } else if (type === 'OFFICES') {
+                const sortedVal = val.split(',').sort().join(',');
+                let solution = "";
+                if (q.id === 302) solution = "Daniela:3,Edward:1,Fei:4,George:5,Helen:2";
+                else if (q.id === 310) solution = "Andrew:5,Beatrice:3,Corrine:2,David:4,Erica:1";
+                else if (q.id === 313) solution = "Alpha:5,Beta:4,Delta:1,Epsilon:3,Gamma:2";
+                mappedAnswers[q.id] = sortedVal === solution ? q.correctIndex : -1;
+            } else if (type === 'SEATING') {
+                const sortedVal = val.split(',').sort().join(',');
+                let solution = "";
+                if (q.id === 303) solution = "Ken:6,Linda:1,Mike:5,Naomi:2,Oscar:3,Petra:4";
+                else if (q.id === 312) solution = "Alice:1,Bob:5,Charlie:2,Diana:3,Eve:4,Frank:6";
+                mappedAnswers[q.id] = sortedVal === solution ? q.correctIndex : -1;
+            } else if (type === 'SCHEDULING') {
+                const pairs = val.split(',').sort().join(',');
+                let solution = "";
+                if (q.id === 304) solution = "t1:14,t2:10,t3:3,t4:5";
+                else if (q.id === 308) solution = "t1:12,t2:3,t3:1,t4:7";
+                else if (q.id === 309) solution = "t1:0,t2:7,t3:9,t4:14";
+                else if (q.id === 314) solution = "t1:0,t2:3,t3:9,t4:15";
+                mappedAnswers[q.id] = pairs === solution ? q.correctIndex : -1;
+            } else {
+                mappedAnswers[q.id] = val === correctVal ? q.correctIndex : -1;
+            }
         }
     });
 
@@ -136,6 +208,12 @@ const DeductiveResults: React.FC<DeductiveResultsProps> = ({ category, questions
                                     )}
                                     {currentQuestion.deductive?.type === 'SEATING' && (
                                         <DeductiveSeating challenge={currentQuestion.deductive} answer={answers[currentQuestion.id] || ''} onAnswerChange={() => { }} />
+                                    )}
+                                    {currentQuestion.deductive?.type === 'TEAM_CALENDAR' && (
+                                        <DeductiveTeamCalendar challenge={currentQuestion.deductive} answer={answers[currentQuestion.id] || ''} onAnswerChange={() => { }} />
+                                    )}
+                                    {currentQuestion.deductive?.type === 'SCHEDULING' && (
+                                        <DeductiveScheduling challenge={currentQuestion.deductive} answer={answers[currentQuestion.id] || ''} onAnswerChange={() => { }} />
                                     )}
                                 </div>
                             </div>
