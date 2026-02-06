@@ -10,7 +10,33 @@ interface DeductiveCalendarProps {
 }
 
 export const DeductiveCalendar: React.FC<DeductiveCalendarProps> = ({ challenge, answer, onAnswerChange }) => {
-    const { items, rules, photos, status, startDay, daysInMonth, isRange, multiSelect } = challenge.data;
+    // Normalize data structure handling both legacy and new formats
+    const rawData = challenge.data || {};
+
+    let startDay = rawData.startDay;
+    let daysInMonth = rawData.daysInMonth;
+    const items = rawData.items || [];
+    const rules = rawData.rules || [];
+    const photos = rawData.photos || [];
+    const status = rawData.status || [];
+    const isRange = rawData.isRange;
+    const multiSelect = rawData.multiSelect;
+
+    // Calculate calendar derived data if initialDate is provided
+    if (rawData.initialDate) {
+        const date = new Date(rawData.initialDate);
+        // Adjust for timezone offset to ensure consistency
+        const userTimezoneOffset = date.getTimezoneOffset() * 60000;
+        const adjustedDate = new Date(date.getTime() + userTimezoneOffset);
+
+        startDay = adjustedDate.getDay(); // 0 (Sun) to 6 (Sat)
+        // Get days in month (0th day of next month)
+        daysInMonth = new Date(adjustedDate.getFullYear(), adjustedDate.getMonth() + 1, 0).getDate();
+    }
+
+    // Fallback defaults if still missing
+    startDay = startDay ?? 0;
+    daysInMonth = daysInMonth ?? 31;
 
     const handleDateSelect = (day: number) => {
         if (multiSelect) {
@@ -76,34 +102,44 @@ export const DeductiveCalendar: React.FC<DeductiveCalendarProps> = ({ challenge,
                 <h3 className="text-[12px] font-bold uppercase tracking-tight">{challenge.scenario}</h3>
             </div>
 
-            {/* Rules Table - High Fidelity with Icons */}
-            <div className="border border-black overflow-hidden shadow-sm">
-                <table className="w-full border-collapse">
-                    <tbody>
-                        {items.map((name: string, i: number) => (
-                            <tr key={name} className="border-b border-black last:border-0 h-11">
-                                <td className="w-12 border-r border-black p-0">
-                                    <div className="w-full h-full bg-slate-100 flex items-center justify-center overflow-hidden">
-                                        <img
-                                            src={photos?.[i] || `https://ui-avatars.com/api/?name=${name}&background=random`}
-                                            alt={name}
-                                            className="w-full h-full object-cover"
-                                        />
-                                    </div>
-                                </td>
-                                <td className="w-24 border-r border-black px-3 py-1 font-bold text-[13px] text-slate-700 bg-white">
-                                    {name}
-                                </td>
-                                <td className="px-4 py-1 flex items-center gap-3 h-11 text-[13px] font-medium text-slate-800 bg-white leading-tight">
-                                    {status?.[i] === 'tick' && <Check className="w-5 h-5 text-emerald-600 shrink-0" />}
-                                    {status?.[i] === 'cross' && <X className="w-5 h-5 text-rose-600 shrink-0" />}
-                                    <span>{rules?.[i] || "Sem regra definida."}</span>
-                                </td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
-            </div>
+            {/* Rules Table - Render ONLY if items exist */}
+            {items.length > 0 && (
+                <div className="border border-black overflow-hidden shadow-sm">
+                    <table className="w-full border-collapse">
+                        <tbody>
+                            {items.map((item: any, i: number) => {
+                                const isObject = typeof item === 'object' && item !== null;
+                                const name = isObject ? item.name : item;
+                                const photoUrl = isObject ? (item.avatar || photos?.[i]) : (photos?.[i]);
+                                const ruleText = isObject ? (item.status || rules?.[i]) : (rules?.[i]);
+                                const itemStatus = isObject ? item.checkStatus : status?.[i]; // checkStatus custom field if needed
+
+                                return (
+                                    <tr key={i} className="border-b border-black last:border-0 h-11">
+                                        <td className="w-12 border-r border-black p-0">
+                                            <div className="w-full h-full bg-slate-100 flex items-center justify-center overflow-hidden">
+                                                <img
+                                                    src={photoUrl || `https://ui-avatars.com/api/?name=${name}&background=random`}
+                                                    alt={name}
+                                                    className="w-full h-full object-cover"
+                                                />
+                                            </div>
+                                        </td>
+                                        <td className="w-24 border-r border-black px-3 py-1 font-bold text-[13px] text-slate-700 bg-white">
+                                            {name}
+                                        </td>
+                                        <td className="px-4 py-1 flex items-center gap-3 h-11 text-[13px] font-medium text-slate-800 bg-white leading-tight">
+                                            {itemStatus === 'tick' && <Check className="w-5 h-5 text-emerald-600 shrink-0" />}
+                                            {itemStatus === 'cross' && <X className="w-5 h-5 text-rose-600 shrink-0" />}
+                                            <span>{ruleText || "Sem regra definida."}</span>
+                                        </td>
+                                    </tr>
+                                );
+                            })}
+                        </tbody>
+                    </table>
+                </div>
+            )}
 
             {/* Question Text */}
             <div className="space-y-2 py-2">
@@ -118,7 +154,7 @@ export const DeductiveCalendar: React.FC<DeductiveCalendarProps> = ({ challenge,
                     </button>
                 </div>
                 <p className="text-[14px] font-medium text-slate-800 leading-snug">
-                    {challenge.rules[0]}
+                    {rawData.question || challenge.rules[0] || "Selecione a data correta no calendário abaixo."}
                 </p>
             </div>
 

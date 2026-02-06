@@ -35,6 +35,7 @@ const App: React.FC = () => {
 
   // Exam State
   const [selectedCategory, setSelectedCategory] = useState<ExamCategory | null>(null);
+  const [generatedQuestions, setGeneratedQuestions] = useState<Question[]>([]);
   const [lastExamResult, setLastExamResult] = useState<ExamResult | null>(null);
   const [currentAnswers, setCurrentAnswers] = useState<Record<number, number>>({});
   const [examHistory, setExamHistory] = useState<ExamHistoryItem[]>(MOCK_EXAM_HISTORY);
@@ -114,7 +115,35 @@ const App: React.FC = () => {
     setIsFavoritesExam(favoritesOnly);
     setInitialSessionState(null); // Clear any resume state
     setCurrentAnswers({});
-    setCurrentView('EXAM_SESSION');
+
+    // Logic to generate questions (Standard vs Pre-Banca)
+    let questionsToUse: Question[] = [];
+
+    if (category.id === 'PRE-BANCA') {
+      const subjects = ['RPA', 'CGA', 'PSS', 'ESS'];
+      subjects.forEach(sub => {
+        const subPool = MOCK_QUESTIONS.filter(q => q.category === sub);
+        // Shuffle and take 20
+        const selected = [...subPool].sort(() => Math.random() - 0.5).slice(0, 20);
+        questionsToUse = [...questionsToUse, ...selected];
+      });
+      // Shuffle final mix
+      questionsToUse = questionsToUse.sort(() => Math.random() - 0.5);
+    } else {
+      const allQs = MOCK_QUESTIONS.filter(q => q.category === category.id);
+      questionsToUse = favoritesOnly
+        ? allQs.filter(q => favorites.includes(q.id))
+        : allQs;
+    }
+
+    setGeneratedQuestions(questionsToUse);
+
+    // For deductive reasoning, go to landing page first
+    if (category.id === 'SHL-DEDUCTIVE') {
+      setCurrentView('DEDUCTIVE_REASONING');
+    } else {
+      setCurrentView('EXAM_SESSION');
+    }
   };
 
   const handleSaveExam = (answers: Record<number, number>, timeLeft: number, currentQuestionIndex: number) => {
@@ -169,25 +198,62 @@ const App: React.FC = () => {
     if (!selectedCategory) return;
 
     // Filter questions based on exam mode
-    const allQuestions = MOCK_QUESTIONS.filter(q => q.category === selectedCategory.id);
-    const questions = isFavoritesExam
-      ? allQuestions.filter(q => favorites.includes(q.id))
-      : allQuestions;
+    // Filter questions based on what was generated
+    const questions = generatedQuestions.length > 0 ? generatedQuestions : (
+      // Fallback logic if needed (e.g. results view directly without start?)
+      isFavoritesExam
+        ? MOCK_QUESTIONS.filter(q => q.category === selectedCategory.id && favorites.includes(q.id))
+        : MOCK_QUESTIONS.filter(q => q.category === selectedCategory.id)
+    );
 
     // Calculate Score
     let score = 0;
     let blank = 0;
+
+    // Detailed stats for Pre-Banca
+    const blockStats: Record<string, { total: number, correct: number }> = {
+      'RPA': { total: 0, correct: 0 },
+      'CGA': { total: 0, correct: 0 },
+      'PSS': { total: 0, correct: 0 },
+      'ESS': { total: 0, correct: 0 }
+    };
+
     questions.forEach(q => {
       if (answers[q.id] === undefined) {
         blank++;
       } else if (answers[q.id] === q.correctIndex) {
         score++;
       }
+
+      // Track block stats for Pre-Banca
+      if (selectedCategory.id === 'PRE-BANCA' && blockStats[q.category]) {
+        blockStats[q.category].total++;
+        if (answers[q.id] === q.correctIndex) {
+          blockStats[q.category].correct++;
+        }
+      }
     });
 
     const incorrect = questions.length - score - blank;
     const percentage = Math.round((score / questions.length) * 100);
-    const resultStatus = percentage >= 70 ? 'Aprovado' : 'Reprovado';
+
+    let resultStatus = percentage >= 70 ? 'Aprovado' : 'Reprovado';
+
+    // Pre-Banca Special Rules
+    if (selectedCategory.id === 'PRE-BANCA') {
+      const failedBlocks = Object.entries(blockStats).filter(([cat, stats]) => {
+        if (stats.total === 0) return false;
+        return (stats.correct / stats.total) < 0.7; // < 70%
+      }).map(([cat]) => cat);
+
+      if (failedBlocks.length === 0) {
+        resultStatus = 'Aprovado';
+      } else if (failedBlocks.length === 1) {
+        resultStatus = `Reprovado – 2ª Época (${failedBlocks[0]})`;
+      } else {
+        resultStatus = 'Reprovado';
+      }
+    }
 
     const mins = Math.floor(timeTakenSeconds / 60);
     const secs = timeTakenSeconds % 60;
@@ -302,10 +368,12 @@ const App: React.FC = () => {
       case 'EXAM_SESSION':
         if (!selectedCategory) return null;
         // Determine Question Set
-        const catQuestions = MOCK_QUESTIONS.filter(q => q.category === selectedCategory.id);
-        const sessionQuestions = isFavoritesExam
-          ? catQuestions.filter(q => favorites.includes(q.id))
-          : (catQuestions.length > 0 ? catQuestions : MOCK_QUESTIONS);
+        // Use generatedQuestions if available (for Pre-Banca and stability), otherwise fallback
+        const sessionQuestions = generatedQuestions.length > 0 ? generatedQuestions : (
+          isFavoritesExam
+            ? MOCK_QUESTIONS.filter(q => q.category === selectedCategory.id && favorites.includes(q.id))
+            : MOCK_QUESTIONS.filter(q => q.category === selectedCategory.id)
+        );
 
         return (
           <ExamSession
