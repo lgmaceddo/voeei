@@ -13,7 +13,9 @@ import {
   FileText,
   Shield,
   Trophy,
-  Link as LinkIcon
+  Link as LinkIcon,
+  Globe,
+  Navigation
 } from 'lucide-react';
 
 interface SidebarProps {
@@ -49,26 +51,26 @@ export const Sidebar: React.FC<SidebarProps> = ({
     return (
       <button
         onClick={() => handleNav(view, filter)}
-        className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-300 group relative
+        className={`w-full flex items-center gap-4 px-5 py-3.5 rounded-2xl transition-all duration-500 group relative overflow-hidden
           ${isActive
-            ? 'bg-white/10 text-white shadow-sm'
+            ? 'bg-gradient-to-r from-cyan-500/10 to-transparent text-white shadow-[0_0_20px_rgba(6,182,212,0.05)]'
             : 'text-slate-400 hover:bg-white/5 hover:text-white'
           }
         `}
       >
-        {/* Active Indicator Line */}
+        {/* Active Indicator Pillar */}
         {isActive && (
-          <div className="absolute left-0 w-1 h-6 bg-primary-500 rounded-r-full" />
+          <div className="absolute left-0 w-1.5 h-8 bg-cyan-500 rounded-r-full shadow-[0_0_15px_rgba(6,182,212,0.6)]" />
         )}
 
-        <Icon className={`w-5 h-5 transition-colors duration-300 ${isActive ? 'text-primary-400' : 'text-slate-500 group-hover:text-primary-400'}`} />
-        <span className={`font-bold text-sm tracking-tight transition-colors duration-300 ${isActive ? 'text-white' : 'group-hover:text-white'}`}>
+        <Icon className={`w-5 h-5 transition-all duration-500 ${isActive ? 'text-cyan-400 scale-110' : 'text-slate-500 group-hover:text-cyan-400'}`} />
+        <span className={`text-[13px] font-black uppercase tracking-widest transition-colors duration-500 ${isActive ? 'text-white' : 'group-hover:text-white'}`}>
           {label}
         </span>
 
         {isActive && (
           <div className="ml-auto">
-            <div className="w-1.5 h-1.5 rounded-full bg-primary-500 shadow-[0_0_8px_rgba(14,165,233,0.8)]" />
+            <div className="w-1.5 h-1.5 rounded-full bg-cyan-500 animate-pulse shadow-[0_0_10px_rgba(6,182,212,0.8)]" />
           </div>
         )}
       </button>
@@ -80,31 +82,31 @@ export const Sidebar: React.FC<SidebarProps> = ({
       {/* Mobile Overlay */}
       {isOpen && (
         <div
-          className="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-40 lg:hidden"
+          className="fixed inset-0 bg-[#0F172C]/80 backdrop-blur-md z-40 lg:hidden transition-all duration-500"
           onClick={() => setIsOpen(false)}
         />
       )}
 
       {/* Sidebar Container */}
       <aside className={`
-        fixed lg:static inset-y-0 left-0 z-50 w-72 bg-[#0F172A] border-r border-white/5 shadow-2xl lg:shadow-none transform transition-transform duration-500 ease-out flex flex-col
+        fixed lg:static inset-y-0 left-0 z-50 w-80 bg-[#0F172C] border-r border-white/5 shadow-2xl lg:shadow-none transform transition-all duration-700 ease-[cubic-bezier(0.23,1,0.32,1)] flex flex-col p-4
         ${isOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
       `}>
 
-        {/* Logo Area with Gradient background */}
-        <div className="relative pt-2 pb-6 px-8 flex flex-col items-center">
-          <div className="absolute top-0 inset-x-0 h-40 bg-gradient-to-b from-primary-500/10 to-transparent -z-10" />
-          <img src="/logo.png" alt="VOOEI" className="h-[140px] w-auto object-contain drop-shadow-2xl" />
+        {/* Logo Area with Elite Glow */}
+        <div className="relative py-8 flex flex-col items-center">
+          <div className="absolute top-0 inset-x-0 h-48 bg-gradient-to-b from-cyan-500/10 to-transparent -z-10 blur-2xl" />
+          <img src="/logo.png" alt="VOOEI" className="h-[120px] w-auto object-contain drop-shadow-[0_0_25px_rgba(6,182,212,0.3)] hover:scale-105 transition-transform duration-700" />
         </div>
 
         {/* Navigation */}
-        <div className="flex-1 px-4 space-y-6 overflow-y-auto py-4 custom-scrollbar">
+        <div className="flex-1 px-2 space-y-8 overflow-y-auto py-6 custom-scrollbar">
 
-          <div>
-            <div className="px-4 mb-3">
-              <span className="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em]">Principal</span>
+          <div className="space-y-3">
+            <div className="px-5">
+              <span className="elite-label text-slate-500">Centro de Operações</span>
             </div>
-            <div className="space-y-1">
+            <div className="space-y-1.5">
               <NavItem
                 icon={LayoutDashboard}
                 label="Dashboard"
@@ -122,17 +124,17 @@ export const Sidebar: React.FC<SidebarProps> = ({
               />
               <NavItem
                 icon={LinkIcon}
-                label="Links Úteis ANAC"
+                label="Telemetria ANAC"
                 view="USEFUL_LINKS"
               />
             </div>
           </div>
 
-          <div>
-            <div className="px-4 mb-3">
-              <span className="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em]">Estudos</span>
+          <div className="space-y-3">
+            <div className="px-5">
+              <span className="elite-label text-slate-500">Módulos de Preparo</span>
             </div>
-            <div className="space-y-1">
+            <div className="space-y-1.5">
               <NavItem
                 icon={Plane}
                 label="Técnico ANAC"
@@ -149,21 +151,31 @@ export const Sidebar: React.FC<SidebarProps> = ({
               />
               <NavItem
                 icon={BrainCircuit}
-                label="Testes SHL"
+                label="Simulados SHL"
                 view="EXAM_LIST"
                 filter="SHL"
                 activeCondition={currentView === 'EXAM_LIST' && activeFilter === 'SHL'}
+              />
+              <NavItem
+                icon={Globe}
+                label="Idiomas Aéreos"
+                view="LANGUAGE_HUB"
+              />
+              <NavItem
+                icon={Navigation}
+                label="Cabine Virtual"
+                view="CABIN_SIMULATOR"
               />
             </div>
           </div>
 
           {user.role === 'admin' && (
-            <div>
-              <div className="px-4 mb-3 flex items-center gap-2">
-                <Shield className="w-3 h-3 text-primary-500" />
-                <span className="text-[10px] font-black text-primary-500 uppercase tracking-[0.2em]">Sistema</span>
+            <div className="space-y-3">
+              <div className="px-5 flex items-center gap-2">
+                <Shield className="w-3 h-3 text-cyan-500" />
+                <span className="elite-label text-cyan-500">Configuração Elite</span>
               </div>
-              <div className="space-y-1">
+              <div className="space-y-1.5">
                 <NavItem
                   icon={Shield}
                   label="Painel Administrativo"
@@ -173,11 +185,11 @@ export const Sidebar: React.FC<SidebarProps> = ({
             </div>
           )}
 
-          <div>
-            <div className="px-4 mb-3">
-              <span className="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em]">Conta</span>
+          <div className="space-y-3">
+            <div className="px-5">
+              <span className="elite-label text-slate-500">Conta e Acesso</span>
             </div>
-            <div className="space-y-1">
+            <div className="space-y-1.5">
               <NavItem
                 icon={UserIcon}
                 label="Meu Perfil"
@@ -187,39 +199,34 @@ export const Sidebar: React.FC<SidebarProps> = ({
           </div>
         </div>
 
-        {/* Premium User Card */}
-        <div className="p-6 mt-auto">
-          <div className="bg-gradient-to-br from-slate-800/50 to-navy-950/50 rounded-3xl p-4 border border-white/5 relative overflow-hidden group">
-            <div className="absolute top-0 right-0 w-16 h-16 bg-primary-500/10 rounded-full blur-xl -mr-4 -mt-4" />
+        {/* Premium User Card with Cockpit Aesthetics */}
+        <div className="pt-6">
+          <div className="bg-[#1E293B]/40 rounded-[2rem] p-5 border border-white/5 relative overflow-hidden group hover:border-cyan-500/20 transition-all duration-500">
+            <div className="absolute top-0 right-0 w-24 h-24 bg-cyan-500/5 rounded-full blur-[40px] -mr-8 -mt-8" />
 
-            <div className="flex items-center gap-3 relative z-10">
+            <div className="flex items-center gap-4 relative z-10">
               <div className="relative">
-                <img src={user.avatarUrl} className="w-10 h-10 rounded-2xl border border-white/10 shadow-lg object-cover" alt="User" />
-                <div className="absolute -bottom-1 -right-1 w-3 h-3 bg-green-500 border-2 border-[#0F172A] rounded-full" />
+                <img src={user.avatarUrl} className="w-12 h-12 rounded-2xl border border-white/10 shadow-lg object-cover group-hover:scale-105 transition-transform duration-500" alt="User" />
+                <div className="absolute -bottom-1 -right-1 w-3.5 h-3.5 bg-green-500 border-4 border-[#0F172C] rounded-full shadow-[0_0_10px_rgba(34,197,94,0.5)]" />
               </div>
               <div className="flex-1 min-w-0">
-                <p className="text-sm font-black text-white truncate tracking-tight">{user.name}</p>
+                <p className="text-[14px] font-black text-white truncate uppercase tracking-tighter">{user.name}</p>
                 <div className="flex flex-col gap-0.5">
                   <div className="flex items-center gap-1.5">
-                    <div className="w-1.5 h-1.5 rounded-full bg-primary-500" />
-                    <p className="text-[10px] font-black text-primary-500 uppercase tracking-tighter">
-                      {user.planType || 'Plano Premium'}
+                    <div className="w-1.5 h-1.5 rounded-full bg-cyan-500 shadow-[0_0_8px_rgba(6,182,212,0.8)]" />
+                    <p className="text-[9px] font-black text-cyan-400 uppercase tracking-widest italic">
+                      {user.planType || 'Piloto Elite'}
                     </p>
                   </div>
-                  {user.planExpiration && (
-                    <p className="text-[10px] font-bold text-slate-500 uppercase tracking-tighter">
-                      Expira em: {user.planExpiration}
-                    </p>
-                  )}
                 </div>
               </div>
             </div>
 
             <button
               onClick={onLogout}
-              className="mt-4 w-full flex items-center justify-center gap-2 text-[10px] font-black uppercase tracking-widest text-slate-400 hover:text-rose-500 py-3 rounded-xl hover:bg-rose-500/10 transition-all duration-300 border border-transparent hover:border-rose-500/20"
+              className="mt-5 w-full flex items-center justify-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] text-slate-500 hover:text-rose-400 py-3.5 rounded-2xl bg-white/5 hover:bg-rose-500/10 transition-all duration-500 border border-white/5 hover:border-rose-500/20"
             >
-              <LogOut className="w-3 h-3" /> Fazer Logout
+              <LogOut className="w-3.5 h-3.5" /> Ejetar Sessão
             </button>
           </div>
         </div>

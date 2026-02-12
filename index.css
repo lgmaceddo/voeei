@@ -1,0 +1,90 @@
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --aviation-primary: #06B6D4;
+  --aviation-navy: #0F172A;
+  --aviation-slate-50: #F8FAFC;
+  --aviation-slate-100: #F1F5F9;
+  --aviation-slate-200: #E2E8F0;
+  --aviation-slate-400: #94A3B8;
+  --aviation-slate-600: #475569;
+  --aviation-slate-800: #1E293B;
+}
+
+body {
+  @apply bg-aviation-slate-50 text-aviation-slate-800 antialiased font-sans;
+  background-image: 
+    radial-gradient(circle at 1px 1px, rgba(148, 163, 184, 0.05) 1px, transparent 0);
+  background-size: 32px 32px;
+}
+
+/* Custom Scrollbar */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 5px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  @apply bg-aviation-slate-200 rounded-full;
+}
+
+/* Aviation UX Special Classes */
+.glass-cockpit {
+  @apply bg-white/70 backdrop-blur-xl border border-white/40 shadow-sm transition-all duration-300;
+}
+
+.glass-cockpit:hover {
+  @apply border-aviation-primary/30 shadow-md;
+}
+
+.elite-heading {
+  font-family: 'Outfit', sans-serif;
+  @apply font-black tracking-tighter uppercase;
+}
+
+.tech-label {
+  @apply text-[9px] font-black uppercase tracking-[0.2em] text-aviation-slate-400;
+}
+
+.btn-aviation-primary {
+  @apply bg-aviation-primary text-white font-black uppercase tracking-widest px-6 py-3 rounded-2xl transition-all active:scale-95 shadow-lg shadow-aviation-primary/20 hover:shadow-aviation-primary/40 hover:-translate-y-0.5;
+}
+
+.btn-aviation-outline {
+  @apply border-2 border-aviation-slate-200 text-aviation-slate-600 font-black uppercase tracking-widest px-6 py-3 rounded-2xl transition-all active:scale-95 hover:bg-aviation-slate-50 hover:border-aviation-primary/30;
+}
+
+.hud-panel {
+  @apply relative overflow-hidden p-6 rounded-[2.5rem] border border-aviation-slate-200 bg-white;
+}
+
+.hud-panel::after {
+  content: '';
+  @apply absolute inset-0 pointer-events-none opacity-[0.03];
+  background-image: linear-gradient(to bottom, transparent, theme('colors.primary.500'), transparent);
+  background-size: 100% 4px;
+  animation: scanline 10s linear infinite;
+}
+
+@keyframes scanline {
+  0% { transform: translateY(-100%); }
+  100% { transform: translateY(100%); }
+}
+
+/* Animations */
+.animate-float {
+  animation: float 4s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+.selection-aviation {
+  @apply selection:bg-aviation-primary/20 selection:text-aviation-primary;
+}

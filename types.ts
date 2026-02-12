@@ -15,6 +15,9 @@ export type ViewState =
   | 'DEDUCTIVE_REASONING'
   | 'DEDUCTIVE_SESSION'
   | 'DEDUCTIVE_RESULTS'
+  | 'LANGUAGE_HUB'
+  | 'LANGUAGE_EXAM'
+  | 'CABIN_SIMULATOR'
   | 'ADMIN';
 
 export interface Feature {
@@ -155,6 +158,8 @@ export interface ExtraCourse {
 
 export interface CVData {
   photo?: string; // Base64 string for the photo
+  photoZoom?: number; // Zoom level for the photo (1 to 2)
+  photoY?: number;    // Vertical offset for the photo
   fullName: string;
   role: string;
 
@@ -188,4 +193,5 @@ export interface CVData {
   extraCourses: ExtraCourse[]; // Specific section for courses
   skills: string[];
   languages: string[];
+  colorTheme?: string; // Cyan-500, etc.
 }

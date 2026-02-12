@@ -9,86 +9,88 @@ interface UsefulLinksProps {
 }
 
 const UsefulLinks: React.FC<UsefulLinksProps> = ({ links, onBack }) => {
-    // Group links by category if needed, currently just mapping
-    const categories = Array.from(new Set(links.map(l => l.category)));
-
     return (
-        <div className="max-w-5xl mx-auto space-y-10 animate-fade-in pb-20">
-            {/* Header */}
-            <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
-                <div className="flex items-center gap-4">
+        <div className="max-w-7xl mx-auto space-y-12 pb-24 animate-fade-in relative z-10 font-sans">
+            {/* Header - Tactical Nav */}
+            <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-8 border-l-4 border-cyan-500 pl-8">
+                <div className="flex items-center gap-6">
                     {onBack && (
                         <button
                             onClick={onBack}
-                            className="bg-white p-2 rounded-full shadow-sm hover:bg-slate-50 border border-slate-100 transition-all active:scale-95"
+                            className="bg-white/5 p-4 rounded-full shadow-xl hover:bg-white/10 border border-white/10 transition-all active:scale-95 group"
                         >
-                            <ArrowLeft className="w-5 h-5 text-slate-500" />
+                            <ArrowLeft className="w-5 h-5 text-cyan-400 group-hover:-translate-x-1 transition-transform" />
                         </button>
                     )}
                     <div>
-                        <h1 className="text-3xl font-black text-navy-900 tracking-tight">Links Úteis ANAC</h1>
-                        <p className="text-slate-500 font-medium">Acesso rápido aos sistemas oficiais da Aeronáutica Civil.</p>
+                        <h1 className="text-5xl font-black text-white elite-heading tracking-tighter uppercase mb-2">Portal de <span className="text-cyan-400">Integração</span></h1>
+                        <p className="text-slate-400 font-bold italic tracking-wide">Acesso de alta prioridade aos sistemas oficiais da Aeronáutica Civil.</p>
                     </div>
                 </div>
-                <div className="bg-primary-500/10 text-primary-600 px-4 py-2 rounded-2xl border border-primary-500/20 text-xs font-black uppercase tracking-widest flex items-center gap-2">
-                    <ShieldCheck className="w-4 h-4" /> Sistemas Oficiais
+                <div className="bg-cyan-500/10 text-cyan-400 px-6 py-3 rounded-2xl border border-cyan-500/20 text-[10px] font-black uppercase tracking-[0.3em] flex items-center gap-3 animate-pulse shadow-[0_0_20px_rgba(6,182,212,0.1)]">
+                    <ShieldCheck className="w-4 h-4" /> PROTOCOLOS OFICIAIS
                 </div>
             </div>
 
-            {/* Links Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {/* Links Grid - Standardized Elite Cards */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 {links.map((link) => (
                     <a
                         key={link.id}
                         href={link.url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="group bg-white p-8 rounded-[32px] border border-slate-100 shadow-sm hover:shadow-xl hover:shadow-primary-500/5 hover:-translate-y-1 transition-all duration-300 flex flex-col h-full overflow-hidden relative"
+                        className="group bg-[#1E293B]/40 backdrop-blur-xl p-10 rounded-[3rem] border border-white/5 shadow-2xl hover:border-cyan-500/30 hover:scale-[1.02] transition-all duration-700 flex flex-col h-full overflow-hidden relative"
                     >
-                        {/* Decorative Background Icon */}
-                        <div className="absolute -right-4 -bottom-4 text-slate-50 opacity-[0.03] group-hover:opacity-[0.08] transition-opacity">
-                            <ExternalLink size={140} />
+                        {/* Decorative HUD Background Icon */}
+                        <div className="absolute -right-8 -bottom-8 text-cyan-500 opacity-[0.02] group-hover:opacity-[0.1] transition-all duration-[2000ms] transform group-hover:scale-125 group-hover:-rotate-12">
+                            <ExternalLink size={200} />
                         </div>
 
-                        <div className="mb-6">
-                            <div className="w-12 h-12 bg-primary-50 text-primary-500 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-primary-500 group-hover:text-white transition-colors duration-500">
-                                {link.title.includes('Licenças') && <Fingerprint className="w-6 h-6" />}
-                                {link.title.includes('Exames') && <FileText className="w-6 h-6" />}
-                                {link.title.includes('CMA') && <ShieldCheck className="w-6 h-6" />}
-                                {!link.title.includes('Licenças') && !link.title.includes('Exames') && !link.title.includes('CMA') && <ExternalLink className="w-6 h-6" />}
+                        <div className="mb-10 relative z-10">
+                            <div className="w-16 h-16 bg-white/5 text-cyan-400 border border-white/10 rounded-2xl flex items-center justify-center mb-10 group-hover:bg-gradient-to-br group-hover:from-cyan-500 group-hover:to-blue-600 group-hover:text-white transition-all duration-500 shadow-xl group-hover:shadow-cyan-500/20">
+                                {link.title.includes('Licenças') && <Fingerprint className="w-8 h-8" />}
+                                {link.title.includes('Exames') && <FileText className="w-8 h-8" />}
+                                {link.title.includes('CMA') && <ShieldCheck className="w-8 h-8" />}
+                                {!link.title.includes('Licenças') && !link.title.includes('Exames') && !link.title.includes('CMA') && <ExternalLink className="w-8 h-8" />}
                             </div>
-                            <h3 className="text-xl font-black text-navy-900 mb-3 group-hover:text-primary-600 transition-colors">
+                            <h3 className="text-2xl font-black text-white mb-4 elite-heading tracking-tighter uppercase group-hover:text-cyan-400 transition-colors">
                                 {link.title}
                             </h3>
-                            <p className="text-slate-500 text-sm font-medium leading-relaxed">
+                            <p className="text-slate-400 text-sm font-bold leading-relaxed italic tracking-wide">
                                 {link.description}
                             </p>
                         </div>
 
-                        <div className="mt-auto flex items-center gap-2 text-primary-500 text-xs font-black uppercase tracking-widest">
-                            Acessar Portal <ExternalLink className="w-3.5 h-3.5 transition-transform group-hover:translate-x-1 group-hover:-translate-y-1" />
+                        <div className="mt-auto flex items-center gap-3 text-cyan-500 text-[10px] font-black uppercase tracking-[0.3em] relative z-10 group-hover:text-cyan-400 transition-colors">
+                            ACESSAR PORTAL SEGURO <ExternalLink className="w-4 h-4 transition-transform group-hover:translate-x-1 group-hover:-translate-y-1" />
                         </div>
+
+                        {/* Elite Corner Accent */}
+                        <div className="absolute bottom-0 right-0 w-24 h-24 bg-gradient-to-tl from-cyan-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
                     </a>
                 ))}
 
-                {/* Future Expansion Card */}
-                <div className="bg-slate-50 border-2 border-dashed border-slate-200 p-8 rounded-[32px] flex flex-col items-center justify-center text-center opacity-60">
-                    <div className="w-12 h-12 bg-slate-100 text-slate-300 rounded-2xl flex items-center justify-center mb-4">
-                        <PlusIcon className="w-6 h-6" />
+                {/* Future Expansion Card - Tactical Placeholder */}
+                <div className="bg-[#1E293B]/20 border-2 border-dashed border-white/5 p-10 rounded-[3rem] flex flex-col items-center justify-center text-center opacity-40 hover:opacity-60 transition-all duration-700">
+                    <div className="w-16 h-16 bg-white/5 text-slate-500 rounded-2xl flex items-center justify-center mb-6">
+                        <PlusIcon className="w-8 h-8" />
                     </div>
-                    <span className="text-xs font-bold text-slate-400 uppercase tracking-widest">Em breve novos links</span>
+                    <span className="text-[10px] font-black text-slate-500 uppercase tracking-[0.4em]">AGUARDANDO CONEXÃO</span>
                 </div>
             </div>
 
-            {/* Info Box */}
-            <div className="bg-navy-900 text-white p-8 rounded-[32px] flex flex-col md:flex-row items-center gap-6 shadow-2xl shadow-navy-900/20">
-                <div className="w-16 h-16 bg-white/10 rounded-2xl flex items-center justify-center shrink-0">
-                    <ShieldCheck className="w-8 h-8 text-primary-400" />
+            {/* Info Box - Technical Alert */}
+            <div className="bg-[#1E293B]/80 backdrop-blur-2xl text-white p-10 lg:p-14 rounded-[3rem] flex flex-col md:flex-row items-center gap-10 border border-white/10 shadow-[0_40px_100px_rgba(0,0,0,0.3)] relative overflow-hidden group">
+                <div className="absolute top-0 right-0 w-80 h-80 bg-cyan-500/5 rounded-full blur-[80px]" />
+
+                <div className="w-20 h-20 bg-cyan-500/10 rounded-2xl flex items-center justify-center shrink-0 border border-cyan-500/20 group-hover:scale-110 transition-transform duration-700">
+                    <ShieldCheck className="w-10 h-10 text-cyan-400 animate-pulse" />
                 </div>
                 <div>
-                    <h4 className="text-lg font-black mb-1">Dica de Segurança</h4>
-                    <p className="text-slate-400 text-sm font-medium leading-relaxed">
-                        Sempre verifique se você está em um ambiente seguro (https) ao inserir seus dados no portal do SACI ou ANAC. Este portal apenas facilita o seu acesso aos endereços oficiais.
+                    <h4 className="text-xl font-black mb-3 elite-heading tracking-tight uppercase group-hover:text-cyan-400 transition-colors">Protocolo de Segurança Crítica</h4>
+                    <p className="text-slate-400 text-base font-bold leading-relaxed italic max-w-3xl">
+                        Sempre verifique se a conexão é criptografada (SSL/HTTPS) antes de inserir credenciais nos portais SACI ou ANAC. Esta interface atua apenas como gateway de redirecionamento para os ambientes homologados.
                     </p>
                 </div>
             </div>

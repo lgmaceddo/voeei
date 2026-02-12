@@ -84,12 +84,12 @@ const ExamSession: React.FC<ExamSessionProps> = ({
     };
 
     return (
-        <div className="min-h-screen bg-slate-50/50 pb-20 relative font-sans">
+        <div className="min-h-screen theme-study font-sans selection:bg-cyan-500/20 pb-32 relative">
             <ExamHeader category={category} onCancel={onCancel} />
 
-            <div className="max-w-7xl mx-auto px-4 grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-                {/* --- LEFT COLUMN: Content --- */}
-                <div className="lg:col-span-8">
+            <div className="max-w-[1600px] mx-auto px-8 grid grid-cols-1 lg:grid-cols-12 gap-12 items-start relative z-10">
+                {/* --- LEFT COLUMN: Mission Content --- */}
+                <div className="lg:col-span-8 space-y-12 animate-fade-in-up">
                     <ExamStatsBar
                         correctCount={correctCount}
                         incorrectCount={incorrectCount}
@@ -112,8 +112,8 @@ const ExamSession: React.FC<ExamSessionProps> = ({
                     />
                 </div>
 
-                {/* --- RIGHT COLUMN: Controls --- */}
-                <div className="lg:col-span-4">
+                {/* --- RIGHT COLUMN: Control HUD --- */}
+                <div className="lg:col-span-4 sticky top-12 animate-fade-in-up delay-200">
                     <ExamSidebar
                         timeLeft={timeLeft}
                         showTimer={showTimer}
@@ -132,6 +132,13 @@ const ExamSession: React.FC<ExamSessionProps> = ({
                         onFinish={() => setShowFinishConfirmation(true)}
                     />
                 </div>
+            </div>
+
+            {/* Tactical Telemetry Label */}
+            <div className="fixed bottom-6 right-8 text-[9px] font-black text-slate-700 uppercase tracking-[0.6em] z-50 pointer-events-none flex items-center gap-4">
+                <div className="w-12 h-px bg-slate-800" />
+                <span>VOOEI_SIMULATION_SYSTEM_ACTIVE</span>
+                <div className="w-1.5 h-1.5 rounded-full bg-cyan-500/20" />
             </div>
 
             {showFinishConfirmation && (

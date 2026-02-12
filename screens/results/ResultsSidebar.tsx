@@ -31,91 +31,82 @@ export const ResultsSidebar: React.FC<ResultsSidebarProps> = ({
     canPrev
 }) => {
     return (
-        <div className="space-y-4 sticky top-6">
-            {/* Quick Navigation Card */}
-            <div className="bg-white p-2 rounded-[2rem] border border-slate-200 shadow-sm flex gap-2">
-                <Button
-                    variant="outline"
+        <div className="space-y-6 sticky top-8">
+            {/* Quick Navigation Panel */}
+            <div className="bg-white p-4 rounded-[2.5rem] border border-slate-200 shadow-sm flex gap-3 group relative overflow-hidden">
+                <button
                     onClick={onPrev}
                     disabled={!canPrev}
-                    className="flex-1 rounded-2xl py-6"
+                    className="flex-1 bg-slate-50 hover:bg-slate-100 text-slate-600 rounded-2xl py-6 flex items-center justify-center transition-all disabled:opacity-30 border border-slate-100 active:scale-95 group/prev"
                 >
-                    <ArrowLeft className="w-5 h-5" />
-                </Button>
-                <Button
-                    variant="primary"
+                    <ArrowLeft className="w-6 h-6 group-hover/prev:-translate-x-1 transition-transform" />
+                </button>
+                <button
                     onClick={onNext}
                     disabled={!canNext}
-                    className="flex-[2] rounded-2xl py-6"
+                    className="flex-[2] bg-cyan-600 text-white font-black uppercase text-xs tracking-widest rounded-2xl py-6 flex items-center justify-center transition-all disabled:opacity-30 shadow-md active:scale-95 group/next"
                 >
-                    Próxima <ArrowRight className="w-5 h-5 ml-2" />
-                </Button>
-            </div>
-
-            {/* Favorite Action Card */}
-            <div className={`p-1 rounded-[2.5rem] transition-all duration-500 ${isFavorite ? 'bg-amber-400' : 'bg-slate-100'}`}>
-                <button
-                    onClick={onToggleFavorite}
-                    className={`w-full font-black py-6 rounded-[2.3rem] transition-all flex items-center justify-center gap-3 active:scale-95 border-b-4 ${isFavorite
-                            ? 'bg-amber-500 text-white border-amber-600 shadow-xl shadow-amber-200'
-                            : 'bg-white text-slate-700 border-slate-200 shadow-sm hover:translate-y-[-2px]'
-                        }`}
-                >
-                    <Star className={`w-5 h-5 ${isFavorite ? 'fill-white' : 'fill-slate-100 text-slate-300'}`} />
-                    {isFavorite ? 'SALVA NOS FAVORITOS' : 'FAVORITAR QUESTÃO'}
+                    PRÓXIMA <ArrowRight className="w-5 h-5 ml-3 group-hover/next:translate-x-1 transition-transform" />
                 </button>
             </div>
 
-            {/* Main Actions Panel */}
-            <div className="bg-navy-900 p-6 rounded-[2.5rem] shadow-2xl relative overflow-hidden group">
-                <div className="absolute top-0 right-0 p-8 opacity-5 group-hover:scale-125 transition-transform duration-700">
-                    <ShieldCheck className="w-24 h-24" />
+            {/* Favorite Action */}
+            <div className={`p-1 rounded-[2.5rem] transition-all duration-700 ${isFavorite ? 'bg-amber-100 border border-amber-200 scale-[1.02]' : 'bg-white border border-slate-200'}`}>
+                <button
+                    onClick={onToggleFavorite}
+                    className={`w-full font-black py-7 rounded-[2.35rem] transition-all duration-300 flex items-center justify-center gap-4 active:scale-95 ${isFavorite
+                        ? 'bg-amber-500 text-white shadow-md'
+                        : 'bg-transparent text-slate-400 hover:text-slate-700'
+                        }`}
+                >
+                    <Star className={`w-6 h-6 ${isFavorite ? 'fill-white' : 'text-slate-300'}`} />
+                    <span className="text-[10px] uppercase tracking-widest">{isFavorite ? 'Favoritada' : 'Marcar para Revisão'}</span>
+                </button>
+            </div>
+
+            {/* Main Operations Control */}
+            <div className="bg-white p-10 rounded-[3rem] border border-slate-200 shadow-sm relative overflow-hidden group">
+                <div className="flex items-center gap-3 mb-10">
+                    <div className="w-3 h-3 bg-cyan-600 rounded-full shadow-sm" />
+                    <h3 className="text-slate-800 font-black text-[10px] uppercase tracking-widest elite-heading">Ações do Simulado</h3>
                 </div>
 
-                <h3 className="text-white font-black text-xs uppercase tracking-[0.2em] mb-6 flex items-center gap-2">
-                    <div className="w-1.5 h-1.5 bg-primary-500 rounded-full" />
-                    Ações de Aprovação
-                </h3>
-
-                <div className="space-y-3 relative z-10">
-                    <Button
+                <div className="space-y-4 relative z-10">
+                    <button
                         onClick={onReview}
-                        className="w-full bg-primary-500 hover:bg-primary-600 text-white rounded-2xl py-5 shadow-xl shadow-primary-900/40 text-sm font-black tracking-tight"
+                        className="w-full bg-slate-50 hover:bg-cyan-600 text-slate-600 hover:text-white rounded-2xl py-6 border border-slate-200 hover:border-cyan-700 font-black text-[10px] uppercase tracking-widest transition-all duration-300 shadow-sm group/review flex items-center justify-center gap-3"
                     >
-                        <BookOpen className="w-4 h-4 mr-2" /> REVISÃO COMPLETA
-                    </Button>
+                        <BookOpen className="w-5 h-5 group-hover/review:scale-110 transition-transform" /> Revisão Completa
+                    </button>
 
-                    <Button
+                    <button
                         onClick={onRetry}
-                        variant="ghost"
-                        className="w-full text-slate-300 hover:text-white hover:bg-white/10 rounded-2xl py-4 transition-all"
+                        className="w-full text-slate-400 hover:text-slate-700 bg-white hover:bg-slate-50 rounded-2xl py-5 border border-slate-100 hover:border-slate-200 font-black text-[10px] uppercase tracking-widest transition-all duration-300 flex items-center justify-center gap-3 group/retry"
                     >
-                        <RefreshCw className="w-4 h-4 mr-2" /> REFAZER ESTE SIMULADO
-                    </Button>
+                        <RefreshCw className="w-4 h-4 group-hover/retry:rotate-180 transition-transform duration-700" /> Refazer Missão
+                    </button>
 
-                    <Button
+                    <button
                         onClick={onNewExam}
-                        variant="ghost"
-                        className="w-full text-slate-300 hover:text-white hover:bg-white/10 rounded-2xl py-4 transition-all"
+                        className="w-full text-slate-400 hover:text-slate-700 bg-white hover:bg-slate-50 rounded-2xl py-5 border border-slate-100 hover:border-slate-200 font-black text-[10px] uppercase tracking-widest transition-all duration-300 flex items-center justify-center gap-3"
                     >
-                        <List className="w-4 h-4 mr-2" /> ESCOLHER NOVO CURSO
-                    </Button>
+                        <List className="w-4 h-4" /> Novo Simulado
+                    </button>
 
-                    <div className="h-px bg-white/10 my-4" />
+                    <div className="h-px bg-slate-100 my-8" />
 
-                    <Button
+                    <button
                         onClick={onHome}
-                        variant="ghost"
-                        className="w-full text-slate-400 hover:text-white rounded-2xl py-3 text-xs font-black tracking-widest uppercase"
+                        className="w-full text-slate-400 hover:text-cyan-700 transition-all font-black text-[10px] uppercase tracking-widest flex items-center justify-center gap-3 group/home"
                     >
-                        <Home className="w-4 h-4 mr-2" /> VOLTAR AO PAINEL
-                    </Button>
+                        <Home className="w-4 h-4 group-hover/home:-translate-y-1 transition-transform" /> Início
+                    </button>
                 </div>
             </div>
 
-            <div className="text-center py-2">
-                <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">
-                    ID Transação: SIM-{Date.now().toString().slice(-6)}
+            <div className="text-center py-4 bg-slate-50 rounded-2xl border border-slate-100">
+                <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest flex items-center justify-center gap-2">
+                    ID: SIM-{Date.now().toString().slice(-6)}
                 </p>
             </div>
         </div>

@@ -81,24 +81,26 @@ export const DeductiveScheduling: React.FC<DeductiveSchedulingProps> = ({ challe
     };
 
     return (
-        <div className="space-y-6 animate-fade-in relative">
-            {/* Header Area */}
-            <div className="flex justify-between items-center mb-1">
-                <h4 className="text-[14px] font-bold text-[#7d7d8a] capitalize">Hoje</h4>
+        <div className="space-y-8 animate-fade-in relative z-10">
+            {/* Mission Controller Header */}
+            <div className="flex items-center justify-between border-l-2 border-cyan-600 pl-4 py-1">
+                <div>
+                    <h4 className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Protocolo de Agendamento</h4>
+                    <p className="text-sm font-bold text-slate-600 italic tracking-wide">Planeje a sequência operacional baseada nas restrições de tempo.</p>
+                </div>
                 <button
                     onClick={() => onAnswerChange('')}
-                    className="p-1 hover:bg-slate-100 rounded-full transition-colors text-slate-400"
-                    title="Limpar Agendamento"
+                    className="bg-slate-100 p-3 rounded-2xl border border-slate-200 text-slate-400 hover:text-rose-600 hover:bg-rose-50 transition-all active:scale-95 group"
+                    title="Resetar Cronograma"
                 >
-                    <RotateCcw className="w-4 h-4" />
+                    <RotateCcw className="w-5 h-5 group-hover:rotate-180 transition-transform duration-700" />
                 </button>
             </div>
 
-            {/* Main Schedule Container */}
-            <div className="space-y-1">
-                <div className="relative">
-                    {/* The Bar - High Contrast Tabular Style */}
-                    <div className="flex border-t border-b border-l border-black h-12 w-full bg-white">
+            {/* Tactical Schedule Grid */}
+            <div className="relative">
+                <div className="rounded-[3rem] p-1.5 bg-slate-50 border border-slate-200 shadow-inner overflow-hidden">
+                    <div className="flex bg-white h-24 relative overflow-hidden group/grid">
                         {allSlots.map((_time, sIdx) => {
                             const busySlot = busy.includes(sIdx);
                             const taskIdAtSlot = Object.entries(currentPositions).find(([id, pos]) => {
@@ -113,27 +115,25 @@ export const DeductiveScheduling: React.FC<DeductiveSchedulingProps> = ({ challe
                                     key={sIdx}
                                     onDragOver={handleDragOver}
                                     onDrop={(e) => handleDrop(e, sIdx)}
-                                    className={`flex-1 border-r border-black relative transition-colors cursor-pointer
-                                        ${busySlot ? 'bg-[#8b8b9a]' : 'bg-white hover:bg-slate-50'}
+                                    className={`flex-1 border-r border-slate-100 last:border-r-0 relative transition-all duration-300
+                                        ${busySlot ? 'bg-slate-100 opacity-60' : 'bg-transparent hover:bg-slate-50 cursor-pointer'}
                                     `}
                                 >
                                     {isStartOfTask && taskAtSlot && (
                                         <div
                                             style={{
-                                                width: `calc(${taskAtSlot.duration * 100}% - 4px)`,
-                                                backgroundColor: taskAtSlot.color,
-                                                left: '2px'
+                                                width: `calc(${taskAtSlot.duration * 100}% + ${taskAtSlot.duration - 1}px)`,
+                                                backgroundColor: taskAtSlot.color
                                             }}
-                                            className="absolute top-1 bottom-1 z-20 rounded shadow-sm flex items-center justify-center px-1 group transition-all duration-200"
+                                            className="absolute inset-0 z-20 flex items-center px-6 group/task shadow-md border-x border-white/20 animate-[scaleIn_0.3s_ease-out]"
                                         >
-                                            <div className="flex flex-col items-center min-w-0 text-center">
-                                                <span className="text-[8px] font-black text-white uppercase leading-tight truncate">
-                                                    {taskAtSlot.title.split(' ')[0]}
-                                                </span>
-                                            </div>
+                                            <div className="w-1.5 h-1.5 rounded-full bg-white mr-3 animate-pulse" />
+                                            <span className="text-[10px] font-black text-white elite-heading uppercase tracking-widest truncate pointer-events-none">
+                                                {taskAtSlot.title}
+                                            </span>
                                             <button
                                                 onClick={(e) => { e.stopPropagation(); handleRemove(taskIdAtSlot); }}
-                                                className="absolute -right-2 -top-2 w-5 h-5 rounded-full bg-black text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity border border-white z-30 text-[10px]"
+                                                className="absolute -right-3 -top-3 w-8 h-8 rounded-xl bg-white text-rose-600 flex items-center justify-center opacity-0 group-hover/task:opacity-100 transition-all border border-slate-200 shadow-lg z-40 hover:bg-rose-500 hover:text-white active:scale-90"
                                             >
                                                 ×
                                             </button>
@@ -143,28 +143,29 @@ export const DeductiveScheduling: React.FC<DeductiveSchedulingProps> = ({ challe
                             );
                         })}
                     </div>
+                </div>
 
-                    {/* Timeline Labels - Precisely Aligned to Box Borders */}
-                    <div className="relative w-full h-6 mt-1">
-                        {hours.map((h: string, idx: number) => (
-                            <div
-                                key={h}
-                                style={{
-                                    left: `${(idx * (100 / (hours.length - 1)))}%`,
-                                    transform: idx === hours.length - 1 ? 'translateX(-100%)' : 'translateX(-50%)'
-                                }}
-                                className={`absolute top-0 text-[12px] font-bold text-[#7d7d8a] ${idx === 0 ? 'translate-x-0' : ''}`}
-                            >
-                                {h}
-                            </div>
-                        ))}
+                {/* Tactical Telemetry Labels */}
+                <div className="flex relative mt-6 h-8 px-6">
+                    {hours.slice(0, -1).map((h: string, idx: number) => (
+                        <div key={h} className="flex-1 relative">
+                            <span className="absolute left-0 -translate-x-1/2 text-[10px] font-black text-slate-400 elite-heading uppercase tracking-widest">
+                                {h}<span className="text-[8px] opacity-40 ml-0.5">H</span>
+                            </span>
+                        </div>
+                    ))}
+                    <div className="w-0 relative">
+                        <span className="absolute left-0 -translate-x-1/2 text-[10px] font-black text-slate-400 elite-heading uppercase tracking-widest">
+                            {hours[hours.length - 1]}<span className="text-[8px] opacity-40 ml-0.5">H</span>
+                        </span>
                     </div>
                 </div>
             </div>
 
-            {/* Draggable Tasks Bank - List Style like Reference Photo */}
-            <div className="pt-4">
-                <div className="flex flex-col gap-3">
+            {/* Tactical Deployment Tray */}
+            <div className="pt-10 border-t border-slate-100">
+                <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-8 block text-center">Unidades Operacionais para Emprego</span>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     {tasks.map((task: any) => {
                         const isAssigned = !!currentPositions[task.id];
                         return (
@@ -172,30 +173,31 @@ export const DeductiveScheduling: React.FC<DeductiveSchedulingProps> = ({ challe
                                 key={task.id}
                                 draggable={!isAssigned}
                                 onDragStart={(e) => handleDragStart(e, task.id)}
-                                className={`group relative bg-white border border-slate-100 rounded shadow-sm transition-all overflow-hidden
+                                className={`group relative flex items-center h-24 bg-white border border-slate-200 rounded-[2rem] transition-all duration-500 overflow-hidden shadow-sm
                                     ${isAssigned
-                                        ? 'opacity-40 grayscale cursor-not-allowed'
-                                        : 'hover:border-slate-300 cursor-grab active:cursor-grabbing hover:shadow-md'
+                                        ? 'opacity-20 grayscale cursor-not-allowed shadow-none'
+                                        : 'hover:border-cyan-400 hover:bg-slate-50 cursor-grab active:cursor-grabbing hover:scale-[1.02] hover:shadow-md'
                                     }
                                 `}
                             >
-                                <div className="flex items-center h-14">
-                                    {/* Color Indicator Strip */}
-                                    <div
-                                        style={{ backgroundColor: task.color }}
-                                        className="w-4 h-full shrink-0"
-                                    />
+                                {/* Tactical Side Pillar */}
+                                <div style={{ backgroundColor: task.color }} className="w-3 h-full shrink-0 shadow-sm transition-all duration-500 group-hover:w-4" />
 
-                                    <div className="flex-1 flex justify-between items-center px-6">
-                                        <span className="text-[15px] font-bold text-slate-700">
+                                <div className="flex-1 flex items-center justify-between px-8">
+                                    <div className="flex flex-col">
+                                        <span className="text-xs font-black text-slate-800 elite-heading uppercase tracking-widest mb-1 group-hover:text-cyan-700 transition-colors">
                                             {task.title}
                                         </span>
-                                        <span className="text-[13px] font-medium text-slate-400 italic">
-                                            {task.duration === 1
-                                                ? '30 min'
-                                                : `${(task.duration / 2).toString().replace('.', ',')} h`
-                                            }
+                                        <div className="flex items-center gap-2">
+                                            <div className="w-1.5 h-1.5 rounded-full bg-cyan-600/30 group-hover:bg-cyan-600 animate-pulse" />
+                                            <span className="text-[8px] font-bold text-slate-400 uppercase tracking-widest">Agente Disponível</span>
+                                        </div>
+                                    </div>
+                                    <div className="flex flex-col items-end">
+                                        <span className="text-[10px] font-black text-cyan-700 elite-heading tracking-widest">
+                                            {task.duration === 1 ? '30M' : '60M'}
                                         </span>
+                                        <span className="text-[8px] font-bold text-slate-300 uppercase mt-0.5 tracking-tighter">Duração</span>
                                     </div>
                                 </div>
                             </div>

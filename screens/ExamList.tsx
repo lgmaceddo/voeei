@@ -14,7 +14,7 @@ const ExamList: React.FC<ExamListProps> = ({ onSelectCategory, activeFilter }) =
 
   const filteredCategories = EXAM_CATEGORIES.filter(cat => {
     if (activeFilter === 'ALL' || !activeFilter) return true;
-    if (activeFilter === 'ANAC') return ['RPA', 'CGA', 'PSS', 'ESS'].includes(cat.id);
+    if (activeFilter === 'ANAC') return ['RPA', 'CGA', 'PSS', 'ESS', 'PRE-BANCA'].includes(cat.id);
     if (activeFilter === 'PORTUGUESE') return cat.id.startsWith('PORT');
     if (activeFilter === 'SHL') return cat.id.startsWith('SHL');
     return true;

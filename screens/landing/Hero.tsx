@@ -9,55 +9,53 @@ interface HeroProps {
 
 export const Hero: React.FC<HeroProps> = ({ onLoginClick }) => {
     return (
-        <section className="pt-32 pb-32 px-4 bg-navy-900 relative overflow-hidden">
-            {/* Abstract Background Shapes */}
-            <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-primary-500/10 rounded-full blur-[120px] -z-0"></div>
-            <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-primary-600/10 rounded-full blur-[100px] -z-0"></div>
+        <section className="pt-40 pb-32 px-6 bg-aviation-slate-50 relative overflow-hidden">
+            {/* Aviation Grid Atmosphere */}
+            <div className="absolute inset-0 z-0">
+                <div className="absolute top-0 right-[-10%] w-[800px] h-[800px] bg-aviation-primary/5 rounded-full blur-[160px]" />
+                <div className="absolute bottom-0 left-[-10%] w-[600px] h-[600px] bg-aviation-primary/5 rounded-full blur-[140px]" />
+                <div className="absolute inset-0 opacity-[0.4]" style={{ backgroundImage: 'radial-gradient(#CBD5E1 1px, transparent 1px)', backgroundSize: '40px 40px' }} />
+            </div>
 
             <div className="max-w-7xl mx-auto flex flex-col lg:flex-row items-center gap-16 relative z-10">
-                <div className="flex-1 text-center lg:text-left animate-fade-in-down">
-                    <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary-500/10 text-primary-400 text-xs font-bold mb-8 border border-primary-500/20 uppercase tracking-widest">
-                        <ShieldCheck className="w-4 h-4" />
-                        Plataforma Oficial de Preparação ANAC
+                <div className="flex-1 text-center lg:text-left animate-fade-in">
+                    <div className="inline-flex items-center gap-3 px-4 py-2 rounded-xl bg-white text-aviation-primary text-[10px] font-black mb-8 border border-aviation-slate-200 uppercase tracking-widest shadow-sm">
+                        <div className="w-2 h-2 rounded-full bg-aviation-primary shadow-sm" />
+                        Plataforma de Treinamento ANAC v2.4
                     </div>
-                    <h1 className="text-5xl lg:text-7xl font-extrabold text-white leading-[1.1] mb-8">
-                        Sua <br />
-                        aprovação <br />
-                        <span className="text-blue-400">ANAC</span> <br />
-                        começa agora.
+                    <h1 className="text-5xl lg:text-7xl font-black text-aviation-slate-900 elite-heading leading-[1.1] mb-8 uppercase tracking-tighter">
+                        Excelência em <br />
+                        <span className="text-aviation-primary">Treinamento</span> <br />
+                        Aeronáutico.
                     </h1>
-                    <p className="text-lg text-slate-400 mb-10 max-w-2xl leading-relaxed">
-                        Simulados realistas, histórico completo de desempenho e a experiência mais próxima da prova oficial. Prepare-se para ser Comissário de Voo com quem entende do assunto.
+                    <p className="text-lg text-aviation-slate-500 mb-10 max-w-2xl font-medium leading-relaxed">
+                        Simulados técnicos de alta precisão, análise de performance detalhada e a infraestrutura completa para sua aprovação nas bancas da ANAC.
                     </p>
-                    <div className="flex flex-col sm:flex-row gap-5 justify-center lg:justify-start">
+                    <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
                         <button
                             onClick={() => onLoginClick('SIGNUP')}
-                            className="group px-8 py-4 bg-primary-500 text-white rounded-full font-bold text-lg hover:bg-primary-600 transition-all flex items-center justify-center gap-2 shadow-xl shadow-primary-500/30"
+                            className="bg-aviation-primary text-white px-8 py-4 rounded-xl font-black text-[11px] uppercase tracking-widest hover:shadow-lg hover:shadow-aviation-primary/30 transition-all active:scale-95 flex items-center justify-center gap-3 shadow-md"
                         >
-                            Comece a Estudar Agora <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                            Começar Agora <ArrowRight className="w-4 h-4" />
                         </button>
                         <button
                             onClick={() => onLoginClick('LOGIN')}
-                            className="px-8 py-4 bg-white/5 text-white border border-white/10 rounded-full font-bold text-lg hover:bg-white/10 transition-all text-center"
+                            className="bg-white text-aviation-slate-600 border border-aviation-slate-200 px-8 py-4 rounded-xl font-black text-[11px] uppercase tracking-widest hover:bg-aviation-slate-50 transition-all text-center active:scale-95 shadow-sm"
                         >
-                            Já Tenho Conta
+                            Área do Aluno
                         </button>
                     </div>
                 </div>
 
-                <div className="flex-1 space-y-4 animate-fade-in relative">
-                    {/* 1. Hall of Fame (Now at Top) */}
-                    <div className="bg-white/5 backdrop-blur-md rounded-[32px] border border-white/10 p-6 shadow-2xl overflow-hidden relative group">
-                        <div className="flex items-center justify-between mb-5">
+                <div className="flex-1 w-full lg:max-w-xl space-y-6 animate-fade-in">
+                    {/* Hall of Fame Card */}
+                    <div className="bg-white rounded-[2.5rem] border border-aviation-slate-200 p-8 shadow-sm overflow-hidden relative group">
+                        <div className="flex items-center justify-between mb-8">
                             <div>
-                                <h3 className="text-white font-black text-lg flex items-center gap-2 tracking-tight">
-                                    <Medal className="w-5 h-5 text-amber-500" /> Hall da Fama
+                                <h3 className="text-aviation-slate-900 font-black text-lg flex items-center gap-3 uppercase elite-heading">
+                                    <Trophy className="w-5 h-5 text-amber-500" /> Top Performance
                                 </h3>
-                                <p className="text-slate-500 text-[10px] font-bold uppercase tracking-widest">Top Performance do Mês</p>
-                            </div>
-                            <div className="text-[10px] font-black text-primary-500 uppercase tracking-widest bg-primary-500/10 px-3 py-1.5 rounded-full flex items-center gap-2 border border-primary-500/20">
-                                <span className="w-1.5 h-1.5 bg-primary-500 rounded-full animate-pulse"></span>
-                                Ao Vivo
+                                <p className="text-[10px] font-black text-aviation-slate-400 uppercase tracking-widest mt-1">Ranking de Telemetria Mensal</p>
                             </div>
                         </div>
 
@@ -84,77 +82,42 @@ export const Hero: React.FC<HeroProps> = ({ onLoginClick }) => {
                         </div>
                     </div>
 
-                    <div className="grid grid-cols-2 gap-3">
-                        <StatCard
-                            variant="glass"
-                            icon={<Users />}
-                            value="5.000+"
-                            title="APROVADOS"
-                            suffix="Resultados por todo o país."
-                        />
-                        <StatCard
-                            variant="glass"
-                            icon={<Plane />}
-                            value="Simulados"
-                            title="100% REAIS"
-                            suffix="Design idêntico ANAC."
-                        />
-                        <StatCard
-                            variant="glass"
-                            icon={<FileText />}
-                            value="2.500+"
-                            title="QUESTÕES"
-                            suffix="Banco atualizado semanal."
-                        />
-                        <StatCard
-                            variant="glass"
-                            icon={<Trophy />}
-                            value="98%"
-                            title="APROVAÇÃO"
-                            suffix="Aprovado por comissários."
-                        />
+                    <div className="grid grid-cols-2 gap-4">
+                        <StatItem icon={<Users className="w-5 h-5 text-aviation-primary" />} value="5k+" label="Aprovados" />
+                        <StatItem icon={<Plane className="w-5 h-5 text-aviation-primary" />} value="100%" label="Realismo" />
                     </div>
                 </div>
-            </div>
-
-            {/* Airlines Bar */}
-            <div className="max-w-7xl mx-auto mt-24 pt-12 border-t border-white/5 relative z-10">
-                <p className="text-center text-slate-500 text-sm font-bold uppercase tracking-[0.2em] mb-10">Nossos alunos voam em todas as companhias</p>
-                <div className="flex flex-wrap justify-center items-center gap-12 md:gap-24 opacity-30 grayscale hover:grayscale-0 transition-all duration-700">
-                    <span className="text-3xl font-black text-white tracking-tighter">LATAM</span>
-                    <span className="text-3xl font-black text-white tracking-tighter">GOL</span>
-                    <span className="text-3xl font-black text-white tracking-tighter">AZUL</span>
-                </div>
-            </div>
-
-            {/* Wave Divider */}
-            <div className="absolute bottom-0 left-0 w-full overflow-hidden leading-[0] transform rotate-180">
-                <svg viewBox="0 0 1200 120" preserveAspectRatio="none" className="relative block w-full h-[60px] fill-[#F8FAFC]">
-                    <path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z"></path>
-                </svg>
             </div>
         </section>
     );
 };
 
 const HeroHallItem = ({ rank, name, percentage, image, isChampion }: any) => (
-    <div className={`flex items-center gap-3 p-2 rounded-xl transition-all hover:bg-white/5 border border-transparent hover:border-white/5 ${isChampion ? 'bg-primary-500/5' : ''}`}>
+    <div className={`flex items-center gap-4 p-3 rounded-2xl transition-all hover:bg-aviation-slate-50 border border-transparent ${isChampion ? 'bg-aviation-primary/5 border-aviation-primary/10' : ''}`}>
         <div className="relative">
-            <img src={image} className="w-12 h-12 rounded-full border-2 border-white/10" alt={name} />
-            <div className={`absolute -bottom-1 -right-1 w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-black ${rank === 1 ? 'bg-amber-500 text-white' :
-                rank === 2 ? 'bg-blue-400 text-white' :
-                    'bg-orange-500 text-white'
-                }`}>
+            <img src={image} className={`w-12 h-12 rounded-full border-2 ${rank === 1 ? 'border-amber-400' : 'border-aviation-slate-100'}`} alt={name} />
+            <div className={`absolute -bottom-1 -right-1 w-5 h-5 rounded-full flex items-center justify-center text-[9px] font-black shadow-sm ${rank === 1 ? 'bg-amber-400 text-white' : 'bg-aviation-slate-600 text-white'}`}>
                 {rank}
             </div>
         </div>
         <div className="flex-1">
-            <div className="text-white font-bold text-sm tracking-tight">{name}</div>
-            <div className="text-slate-500 text-[10px] font-bold uppercase tracking-widest">{rank === 1 ? '🏆 Campeão' : 'Aluno VOOEI'}</div>
+            <div className="text-aviation-slate-800 font-bold text-sm uppercase leading-none mb-1">{name}</div>
+            <div className="text-aviation-slate-400 text-[9px] font-black uppercase tracking-widest">Performance Elite</div>
         </div>
         <div className="text-right">
-            <div className="text-primary-400 font-black text-lg">{percentage}%</div>
-            <div className="text-slate-600 text-[8px] font-black uppercase tracking-tighter leading-none">Aproveitamento</div>
+            <div className={`font-black text-lg elite-heading ${rank === 1 ? 'text-aviation-primary' : 'text-aviation-slate-600'}`}>{percentage}%</div>
+        </div>
+    </div>
+);
+
+const StatItem = ({ icon, value, label }: any) => (
+    <div className="bg-white p-6 rounded-3xl border border-aviation-slate-200 shadow-sm flex items-center gap-4">
+        <div className="p-3 bg-aviation-slate-50 rounded-xl border border-aviation-slate-100">
+            {icon}
+        </div>
+        <div>
+            <div className="text-lg font-black text-aviation-slate-900 elite-heading leading-none">{value}</div>
+            <div className="text-[10px] font-black text-aviation-slate-400 uppercase tracking-widest mt-1">{label}</div>
         </div>
     </div>
 );

@@ -30,35 +30,36 @@ export const ResultsPaginationStrip: React.FC<ResultsPaginationStripProps> = ({
     }, [currentQuestionIdx]);
 
     return (
-        <div className="bg-white p-4 rounded-3xl shadow-sm border border-slate-200 mb-6">
+        <div className="bg-white p-6 rounded-[2.5rem] border border-slate-200 mb-10 shadow-sm relative overflow-hidden group">
             <div
                 ref={scrollRef}
-                className="flex gap-3 overflow-x-auto p-1 scrollbar-hide snap-x"
+                className="flex gap-4 overflow-x-auto p-2 scrollbar-hide snap-x relative z-10"
                 style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
             >
                 {questions.map((q, idx) => {
-                    const isCorrect = result.answers[q.id] === q.correctIndex;
+                    const userAnswer = result.answers[q.id];
+                    const isCorrect = userAnswer === q.correctIndex;
                     const isActive = idx === currentQuestionIdx;
                     return (
                         <button
                             key={idx}
-                            className="flex-shrink-0 flex flex-col items-center gap-1.5 snap-center group"
+                            className="flex-shrink-0 flex flex-col items-center gap-3 snap-center group/btn"
                             onClick={() => onNavigate(idx)}
                         >
                             <div className={`
-                                w-11 h-11 rounded-xl text-sm font-black border-2 transition-all flex items-center justify-center active:scale-90
+                                w-14 h-14 rounded-2xl text-base font-black border transition-all duration-300 flex items-center justify-center active:scale-90 elite-heading relative
                                 ${isActive
-                                    ? 'bg-navy-900 text-white border-navy-900 shadow-xl shadow-navy-100 scale-110'
-                                    : 'bg-white text-slate-400 border-slate-100 hover:border-slate-300 hover:text-slate-600'}
+                                    ? 'bg-cyan-600 text-white border-cyan-700 shadow-md scale-110'
+                                    : 'bg-slate-50 text-slate-500 border-slate-100 hover:border-slate-300 hover:text-slate-800'}
                             `}
                             >
                                 {idx + 1}
                             </div>
-                            <div className="h-1 w-5 rounded-full overflow-hidden flex items-center justify-center">
+                            <div className="h-1.5 w-8 rounded-full overflow-hidden flex items-center justify-center bg-slate-100 border border-slate-200 shadow-inner">
                                 {isCorrect ? (
-                                    <div className="w-full h-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.6)]" />
+                                    <div className="w-full h-full bg-emerald-500" />
                                 ) : (
-                                    <div className="w-full h-full bg-rose-500 shadow-[0_0_8px_rgba(244,63,94,0.6)]" />
+                                    <div className="w-full h-full bg-rose-500" />
                                 )}
                             </div>
                         </button>

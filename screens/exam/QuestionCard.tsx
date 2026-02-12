@@ -21,39 +21,44 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
     const isAnswered = answer !== undefined;
 
     return (
-        <div className="bg-white rounded-3xl shadow-sm border border-slate-200 overflow-hidden mb-6">
-            {/* Question Text */}
-            <div className="p-8 border-b border-slate-100 bg-slate-50/30">
-                <h2 className="text-xl font-black text-slate-800 tracking-tight leading-relaxed">
+        <div className="bg-white rounded-[3rem] shadow-[0_15px_60px_-15px_rgba(0,0,0,0.05)] border border-slate-200 overflow-hidden mb-10 transition-all duration-700 relative group/card">
+            {/* Elite Question Header - Briefing Unit */}
+            <div className="p-8 lg:p-12 border-b border-slate-100 bg-slate-50 relative">
+                <div className="flex items-center gap-3 mb-4">
+                    <div className="flex items-center gap-2">
+                        <div className="w-1.5 h-1.5 rounded-full bg-cyan-500 animate-pulse" />
+                        <span className="text-slate-400 text-[9px] font-black uppercase tracking-widest">Unidade de Conhecimento</span>
+                    </div>
+                </div>
+                <h2 className="text-2xl font-black text-slate-800 elite-heading tracking-tighter leading-tight uppercase">
                     {question.text}
                 </h2>
             </div>
 
-            {/* Options List */}
-            <div className="p-8 space-y-4">
+            {/* Tactical Options List - Telemetry Input */}
+            <div className="p-8 lg:p-12 space-y-4">
                 {question.options.map((option, idx) => {
                     const isSelected = answer === idx;
                     const isCorrect = idx === question.correctIndex;
                     const showResult = isAnswered && showAnswerKey;
 
-                    let bgClass = "bg-white border-slate-200 hover:border-primary-200 hover:bg-slate-50/50";
-                    let letterClass = "bg-slate-100 text-slate-500";
+                    let bgClass = "bg-white border-slate-200 hover:border-cyan-500/40 hover:bg-slate-50 shadow-sm";
+                    let letterClass = "bg-slate-100 text-slate-400 border border-slate-200 group-hover:text-cyan-600 group-hover:border-cyan-200";
                     let icon = null;
 
                     if (showResult) {
                         if (isCorrect) {
-                            bgClass = "bg-emerald-50 border-emerald-200 shadow-[0_0_15px_rgba(16,185,129,0.1)]";
-                            letterClass = "bg-emerald-500 text-white";
-                            icon = <Check className="w-5 h-5 text-emerald-500" />;
+                            bgClass = "bg-emerald-50 border-emerald-200 text-emerald-900";
+                            letterClass = "bg-emerald-500 text-white border-emerald-400";
+                            icon = <Check className="w-5 h-5 text-emerald-600" strokeWidth={3} />;
                         } else if (isSelected) {
-                            bgClass = "bg-rose-50 border-rose-200";
-                            letterClass = "bg-rose-500 text-white";
-                            icon = <X className="w-5 h-5 text-rose-500" />;
+                            bgClass = "bg-rose-50 border-rose-200 text-rose-900";
+                            letterClass = "bg-rose-500 text-white border-rose-400";
+                            icon = <X className="w-5 h-5 text-rose-600" strokeWidth={3} />;
                         }
                     } else if (isSelected) {
-                        bgClass = "bg-primary-50 border-primary-500 shadow-[0_0_15px_rgba(14,165,233,0.1)]";
-                        letterClass = "bg-primary-500 text-white";
-                        icon = <Check className="w-4 h-4 text-primary-500" />;
+                        bgClass = "bg-cyan-50 border-cyan-300 text-cyan-900";
+                        letterClass = "bg-cyan-500 text-white border-cyan-400";
                     }
 
                     return (
@@ -62,40 +67,43 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
                             disabled={isAnswered}
                             onClick={() => onSelectOption(idx)}
                             className={`
-                                w-full text-left group flex items-center p-4 rounded-2xl border-2 transition-all duration-300 active:scale-[0.99]
+                                w-full text-left group flex items-center p-6 rounded-[2rem] border transition-all duration-300 active:scale-[0.99]
                                 ${bgClass}
                             `}
                         >
                             <div className={`
-                                w-11 h-11 rounded-xl flex items-center justify-center text-lg font-black flex-shrink-0 transition-all duration-300
+                                w-11 h-11 rounded-2xl flex items-center justify-center text-lg font-black flex-shrink-0 transition-all
                                 ${letterClass}
-                                ${!isAnswered && 'group-hover:scale-110'}
                             `}>
                                 {String.fromCharCode(65 + idx)}
                             </div>
 
-                            <span className={`ml-5 text-base font-bold flex-1 leading-snug ${showResult && isCorrect ? 'text-emerald-900' : 'text-slate-700'}`}>
+                            <span className={`ml-6 text-base font-bold flex-1 leading-snug transition-colors duration-300 ${showResult && isCorrect ? 'text-emerald-700' : isSelected && !showResult ? 'text-cyan-700' : 'text-slate-700'}`}>
                                 {option}
                             </span>
 
                             <div className="flex-shrink-0 ml-4">
                                 {icon}
-                                {!icon && <div className="w-6 h-6 rounded-full border-2 border-slate-200 group-hover:border-primary-400" />}
+                                {!icon && (
+                                    <div className="w-6 h-6 rounded-full border border-slate-200 group-hover:border-cyan-500/50 transition-all flex items-center justify-center">
+                                        <div className={`w-2 h-2 rounded-full transition-all ${isSelected ? 'bg-cyan-500 scale-100' : 'bg-transparent scale-0'}`} />
+                                    </div>
+                                )}
                             </div>
                         </button>
                     );
                 })}
             </div>
 
-            {/* Explanation Section */}
+            {/* Tactical Intelligence Module - Explanation HUD */}
             {isAnswered && showExplanation && (
-                <div className="px-8 pb-8 animate-fade-in-down">
-                    <div className="bg-primary-50/50 border border-primary-100 rounded-3xl p-6">
-                        <div className="flex items-center gap-2 mb-3 text-primary-700 font-black text-xs uppercase tracking-[0.2em]">
+                <div className="px-8 lg:px-12 pb-12 animate-fade-in-up">
+                    <div className="bg-cyan-50 border border-cyan-100 rounded-[2.5rem] p-8 shadow-sm relative overflow-hidden group/intel">
+                        <div className="flex items-center gap-3 mb-4 text-cyan-700 font-black text-[10px] uppercase tracking-widest">
                             <BookOpen className="w-4 h-4" />
-                            Gabarito Comentado
+                            Explicação Técnica
                         </div>
-                        <p className="text-slate-700 leading-relaxed font-medium">
+                        <p className="text-slate-600 leading-relaxed font-bold italic text-base relative z-10">
                             {question.explanation}
                         </p>
                     </div>

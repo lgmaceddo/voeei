@@ -22,6 +22,9 @@ import { MOCK_USER, MOCK_QUESTIONS, MOCK_EXAM_HISTORY, EXAM_CATEGORIES, MOCK_PLA
 import { Menu } from 'lucide-react';
 import { Toast, ToastType } from './components/ui/Toast';
 import { MobileHeader } from './components/layout/MobileHeader';
+import LanguageHub from './screens/LanguageHub';
+import LanguageExam from './screens/LanguageExam';
+import CabinSimulator from './screens/CabinSimulator';
 
 const App: React.FC = () => {
   // --- Global State ---
@@ -69,6 +72,10 @@ const App: React.FC = () => {
   const [activeDeductiveQuestions, setActiveDeductiveQuestions] = useState<Question[]>([]);
   const [deductiveAnswers, setDeductiveAnswers] = useState<Record<number, string>>({});
   const [deductiveTimeTaken, setDeductiveTimeTaken] = useState(0);
+
+  // Language Exam State
+  const [selectedLanguage, setSelectedLanguage] = useState<'ENGLISH' | 'SPANISH'>('ENGLISH');
+  const [selectedLevel, setSelectedLevel] = useState<string>('BEGINNER');
 
   // --- Handlers ---
 
@@ -269,7 +276,7 @@ const App: React.FC = () => {
       incorrect: incorrect,
       blank: blank,
       time: formattedTime,
-      result: resultStatus
+      result: resultStatus as any
     };
 
     setExamHistory(prev => [newHistoryItem, ...prev]);
@@ -515,6 +522,30 @@ const App: React.FC = () => {
           onUpdateFeatures={handleUpdateFeatures}
         /> : null;
 
+      case 'LANGUAGE_HUB':
+        return <LanguageHub
+          onBack={() => setCurrentView('DASHBOARD')}
+          onStartExam={(lang, level) => {
+            setSelectedLanguage(lang);
+            setSelectedLevel(level);
+            setCurrentView('LANGUAGE_EXAM');
+          }}
+        />;
+
+      case 'LANGUAGE_EXAM':
+        return <LanguageExam
+          language={selectedLanguage}
+          level={selectedLevel}
+          onBack={() => setCurrentView('LANGUAGE_HUB')}
+          onComplete={() => {
+            showToast('Sessão finalizada!', 'success');
+            setCurrentView('DASHBOARD');
+          }}
+        />;
+
+      case 'CABIN_SIMULATOR':
+        return <CabinSimulator onBack={() => setCurrentView('DASHBOARD')} />;
+
       case 'LANDING':
         return <LandingPage
           plans={plans}
@@ -555,7 +586,7 @@ const App: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-slate-50 flex overflow-hidden font-sans text-slate-600">
+    <div className="min-h-screen bg-[#080C18] flex overflow-hidden font-sans text-slate-300 selection:bg-cyan-500/30">
 
       <Toast
         message={toast.message}
@@ -581,7 +612,7 @@ const App: React.FC = () => {
         <MobileHeader onOpenSidebar={() => setIsSidebarOpen(true)} />
 
         {/* Scrollable Content */}
-        <main className="flex-1 overflow-y-auto p-4 md:p-8 relative">
+        <main className="flex-1 overflow-y-auto p-4 md:p-8 relative custom-scrollbar">
           {renderContent()}
         </main>
       </div>

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Info, CheckCircle2, BookOpen } from 'lucide-react';
+import { Info, CheckCircle2, BookOpen, ArrowRight } from 'lucide-react';
 import { ExamCategory, Question } from '../types';
 import { DeductiveOffice } from '../components/shl/DeductiveOffice';
 import { DeductiveCalendar } from '../components/shl/DeductiveCalendar';
@@ -62,7 +62,7 @@ const DeductiveSession: React.FC<DeductiveSessionProps> = ({ category, questions
         }
     }, [timeLeft, mode, showTimer]);
 
-    // Scoring Logic for Stats Bar
+    // Scoring Logic (Internal Telemetry)
     const getScoring = () => {
         let correct = 0;
         let incorrect = 0;
@@ -122,7 +122,6 @@ const DeductiveSession: React.FC<DeductiveSessionProps> = ({ category, questions
 
     const { correct, incorrect } = getScoring();
 
-    // Map string answers to numeric index for standard component visual indicators
     const mappedAnswers: Record<number, number> = {};
     questions.forEach((q) => {
         if (answers[q.id] !== undefined) {
@@ -171,8 +170,6 @@ const DeductiveSession: React.FC<DeductiveSessionProps> = ({ category, questions
 
     const handleAnswerChange = (val: string) => {
         setAnswers(prev => ({ ...prev, [currentQuestion.id]: val }));
-
-        // In simulation mode, we might auto-advance
         if (mode === 'SIMULATION' && autoAdvance && currentQuestionIndex < questions.length - 1) {
             setTimeout(() => {
                 setCurrentQuestionIndex(prev => prev + 1);
@@ -198,12 +195,12 @@ const DeductiveSession: React.FC<DeductiveSessionProps> = ({ category, questions
     const isCorrect = mappedAnswers[currentQuestion.id] !== -1;
 
     return (
-        <div className="min-h-screen bg-slate-50/50 pb-20 relative font-sans">
+        <div className="min-h-screen theme-study text-slate-700 pb-24 relative font-sans overflow-x-hidden">
             <ExamHeader category={category} onCancel={onCancel} />
 
-            <div className="max-w-7xl mx-auto px-4 grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-                {/* --- LEFT COLUMN: Content --- */}
-                <div className="lg:col-span-8 space-y-6">
+            <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-12 gap-10 items-start relative z-10">
+                {/* --- LEFT COLUMN: Mission Content --- */}
+                <div className="lg:col-span-8 space-y-8">
                     <ExamStatsBar
                         correctCount={correct}
                         incorrectCount={incorrect}
@@ -217,16 +214,15 @@ const DeductiveSession: React.FC<DeductiveSessionProps> = ({ category, questions
                         onNavigate={setCurrentQuestionIndex}
                     />
 
-                    {/* Deductive Question Card */}
-                    <div className="bg-white rounded-[2.5rem] shadow-sm border border-slate-200 overflow-hidden mb-6">
-                        {/* Application/Interactive Area */}
-                        <div className="p-8 md:p-10 relative">
-                            <div className="space-y-8">
+                    {/* Technical Analysis Card */}
+                    <div className="bg-white rounded-[3rem] border border-slate-200 shadow-sm overflow-hidden mb-10 group relative">
+                        <div className="p-10 md:p-12 relative z-10">
+                            <div className="space-y-10">
                                 {currentQuestion.deductive?.type === 'OFFICES' && (
-                                    <div className="space-y-6">
-                                        <div className="mb-6">
-                                            <h3 className="text-[18px] font-bold text-slate-500 mb-2">{currentQuestion.deductive.scenario}</h3>
-                                            <p className="text-[16px] font-medium text-slate-800 leading-relaxed">{currentQuestion.deductive.rules[0]}</p>
+                                    <div className="space-y-10">
+                                        <div className="border-l-4 border-cyan-600 pl-8 mb-10">
+                                            <h3 className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3">Escenário Operacional</h3>
+                                            <p className="text-2xl font-black text-slate-800 elite-heading tracking-tight leading-relaxed">{currentQuestion.deductive.scenario}</p>
                                         </div>
                                         <DeductiveOffice challenge={currentQuestion.deductive} answer={answers[currentQuestion.id] || ''} onAnswerChange={handleAnswerChange} />
                                     </div>
@@ -235,30 +231,28 @@ const DeductiveSession: React.FC<DeductiveSessionProps> = ({ category, questions
                                     <DeductiveCalendar challenge={currentQuestion.deductive} answer={answers[currentQuestion.id] || ''} onAnswerChange={handleAnswerChange} />
                                 )}
                                 {currentQuestion.deductive?.type === 'SEATING' && (
-                                    <div className="space-y-6">
-                                        <div className="mb-6">
-                                            <h3 className="text-2xl font-black text-slate-800 tracking-tighter uppercase mb-2">{currentQuestion.deductive.scenario}</h3>
-                                            <p className="text-sm font-bold text-slate-500">{currentQuestion.deductive.rules[0]}</p>
+                                    <div className="space-y-10">
+                                        <div className="border-l-4 border-cyan-600 pl-8 mb-10">
+                                            <h3 className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3">Mapa de Posicionamento</h3>
+                                            <p className="text-2xl font-black text-slate-800 elite-heading tracking-tight leading-relaxed uppercase">{currentQuestion.deductive.scenario}</p>
                                         </div>
                                         <DeductiveSeating challenge={currentQuestion.deductive} answer={answers[currentQuestion.id] || ''} onAnswerChange={handleAnswerChange} />
                                     </div>
                                 )}
                                 {currentQuestion.deductive?.type === 'TEAM_CALENDAR' && (
-                                    <DeductiveTeamCalendar
-                                        challenge={currentQuestion.deductive}
-                                        answer={answers[currentQuestion.id] || ''}
-                                        onAnswerChange={handleAnswerChange}
-                                    />
+                                    <DeductiveTeamCalendar challenge={currentQuestion.deductive} answer={answers[currentQuestion.id] || ''} onAnswerChange={handleAnswerChange} />
                                 )}
                                 {currentQuestion.deductive?.type === 'SCHEDULING' && (
-                                    <div className="space-y-6">
-                                        <div className="mb-6">
-                                            <h3 className="text-[18px] font-bold text-slate-500 mb-4">{currentQuestion.deductive.scenario}</h3>
-                                            <div className="space-y-2">
+                                    <div className="space-y-10">
+                                        <div className="border-l-4 border-cyan-600 pl-8 mb-10">
+                                            <h3 className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3">Cronograma de Carga</h3>
+                                            <p className="text-2xl font-black text-slate-800 elite-heading tracking-tight leading-relaxed uppercase mb-6">{currentQuestion.deductive.scenario}</p>
+                                            <div className="space-y-3">
                                                 {currentQuestion.deductive.rules.map((rule: string, rIdx: number) => (
-                                                    <p key={rIdx} className="text-[16px] font-medium text-slate-800 leading-relaxed">
+                                                    <div key={rIdx} className="flex items-start gap-4 text-slate-500 font-bold italic tracking-wide text-sm bg-slate-50 p-4 rounded-2xl border border-slate-100">
+                                                        <div className="w-1.5 h-1.5 bg-cyan-600 rounded-full mt-1.5 shrink-0" />
                                                         {rule}
-                                                    </p>
+                                                    </div>
                                                 ))}
                                             </div>
                                         </div>
@@ -267,68 +261,70 @@ const DeductiveSession: React.FC<DeductiveSessionProps> = ({ category, questions
                                 )}
                             </div>
 
-                            {/* Verification Button (Training Mode) */}
+                            {/* Verification Controller (Training Mode) */}
                             {mode === 'TRAINING' && isAnswered && !showFeedback && (
-                                <div className="mt-12 flex flex-col items-center animate-scale-in">
-                                    <div className="w-full h-px bg-slate-100 mb-8" />
+                                <div className="mt-16 flex flex-col items-center animate-[scaleIn_0.5s_ease-out]">
+                                    <div className="w-full h-px bg-slate-100 mb-10" />
                                     <button
                                         onClick={() => setShowFeedback(true)}
-                                        className="py-5 px-12 bg-navy-900 text-white rounded-3xl font-black text-xs uppercase tracking-[0.2em] shadow-xl shadow-navy-900/20 hover:bg-primary-500 hover:shadow-primary-500/30 transition-all active:scale-95 flex items-center gap-3"
+                                        className="py-6 px-16 bg-cyan-600 text-white rounded-3xl font-black text-[10px] uppercase tracking-widest shadow-md hover:bg-cyan-700 transition-all active:scale-95 flex items-center gap-4 group/btn"
                                     >
-                                        <CheckCircle2 className="w-5 h-5" />
-                                        Finalizar Questão
+                                        <CheckCircle2 className="w-5 h-5 group-hover/btn:scale-110 transition-transform" />
+                                        Finalizar Análise
                                     </button>
-                                    <p className="text-[10px] font-black text-slate-400 mt-4 uppercase tracking-widest">Valide sua lógica para ver a explicação</p>
+                                    <p className="text-[9px] font-black text-slate-400 mt-6 uppercase tracking-widest italic">Validação de Lógica Requerida</p>
                                 </div>
                             )}
 
-                            {/* Feedback (Training Mode) */}
+                            {/* Tactical Debriefing Feedback */}
                             {mode === 'TRAINING' && showFeedback && (
-                                <div className="mt-12 space-y-6 animate-slide-up">
-                                    <div className={`p-8 rounded-[2rem] border relative group overflow-hidden transition-all
-                                        ${isCorrect ? 'bg-emerald-50 border-emerald-100' : 'bg-rose-50 border-rose-100'}
+                                <div className="mt-16 space-y-8 animate-[slideUp_0.7s_ease-out]">
+                                    <div className={`p-10 rounded-[3rem] border relative group overflow-hidden transition-all duration-1000 backdrop-blur-3xl shadow-sm
+                                        ${isCorrect ? 'bg-emerald-50/50 border-emerald-200' : 'bg-rose-50/50 border-rose-200'}
                                     `}>
-                                        <div className="absolute top-0 right-0 p-8 opacity-5 group-hover:scale-110 transition-transform duration-700">
-                                            <BookOpen className={`w-24 h-24 ${isCorrect ? 'text-emerald-500' : 'text-rose-500'}`} />
+                                        <div className="absolute top-0 right-0 p-10 opacity-[0.03] group-hover:scale-125 transition-all duration-1000 transform -rotate-12">
+                                            <BookOpen className={`w-32 h-32 ${isCorrect ? 'text-emerald-500' : 'text-rose-500'}`} />
                                         </div>
                                         <div className="relative z-10">
-                                            <div className={`flex items-center gap-3 mb-4 ${isCorrect ? 'text-emerald-700' : 'text-rose-700'}`}>
-                                                <div className={`w-10 h-10 rounded-xl flex items-center justify-center font-black text-white shadow-lg
-                                                    ${isCorrect ? 'bg-emerald-500' : 'bg-rose-500'}
+                                            <div className="flex items-center gap-6 mb-8">
+                                                <div className={`w-14 h-14 rounded-2xl flex items-center justify-center font-black text-xl border transition-all duration-700 shadow-sm elite-heading
+                                                    ${isCorrect ? 'bg-emerald-500 text-white border-emerald-400' : 'bg-rose-500 text-white border-rose-400'}
                                                 `}>
                                                     {isCorrect ? '✓' : '×'}
                                                 </div>
                                                 <div>
-                                                    <span className="text-[10px] font-black uppercase tracking-[0.2em] block leading-none mb-1">
-                                                        {isCorrect ? 'Lógica Correta' : 'Lógica Incorreta'}
+                                                    <span className="text-[9px] font-black uppercase tracking-widest block leading-none mb-2 text-slate-400">
+                                                        {isCorrect ? 'Conexão Lógica Estabelecida' : 'Falha na Dedução Técnica'}
                                                     </span>
-                                                    <span className="text-[9px] font-bold opacity-60 uppercase tracking-widest">Análise Técnica do Instrutor</span>
+                                                    <span className="text-xl font-black text-slate-800 elite-heading tracking-tight uppercase">Debriefing do Instrutor</span>
                                                 </div>
                                             </div>
-                                            <p className={`text-sm font-bold leading-relaxed italic
-                                                ${isCorrect ? 'text-emerald-900/80' : 'text-rose-900/80'}
-                                            `}>
-                                                {currentQuestion.explanation}
-                                            </p>
+                                            <div className="bg-white p-8 rounded-[2rem] border border-slate-100 shadow-sm">
+                                                <p className={`text-base font-bold leading-relaxed italic tracking-wide
+                                                    ${isCorrect ? 'text-emerald-900/80' : 'text-rose-900/80'}
+                                                `}>
+                                                    {currentQuestion.explanation}
+                                                </p>
+                                            </div>
                                         </div>
                                     </div>
 
-                                    {/* Footer Actions */}
-                                    <div className="flex flex-col sm:flex-row items-center justify-between gap-4 py-4 px-2">
+                                    {/* Operational Footer Actions */}
+                                    <div className="flex flex-col sm:flex-row items-center justify-between gap-6 py-6 px-4">
                                         <button
                                             onClick={handleResetQuestion}
-                                            className="text-slate-400 hover:text-rose-500 font-black text-[10px] uppercase tracking-widest flex items-center gap-2 transition-all p-2 rounded-lg hover:bg-rose-50"
+                                            className="text-slate-400 hover:text-rose-600 font-black text-[9px] uppercase tracking-widest flex items-center gap-3 transition-all p-4 rounded-2xl hover:bg-rose-50 group/reset"
                                         >
-                                            <div className="w-1.5 h-1.5 rounded-full bg-current" />
-                                            Limpar e Tentar Novamente
+                                            <div className="w-1.5 h-1.5 rounded-full bg-current group-hover:animate-ping" />
+                                            Reiniciar Sequência
                                         </button>
 
                                         {currentQuestionIndex < questions.length - 1 && (
                                             <button
                                                 onClick={() => setCurrentQuestionIndex(prev => prev + 1)}
-                                                className="bg-primary-50 text-primary-600 px-6 py-3 rounded-2xl font-black text-[10px] uppercase tracking-widest flex items-center gap-2 hover:bg-primary-500 hover:text-white transition-all shadow-sm"
+                                                className="bg-slate-100 text-cyan-700 px-10 py-5 rounded-[2rem] font-black text-[9px] uppercase tracking-widest flex items-center gap-4 hover:bg-cyan-600 hover:text-white transition-all duration-500 shadow-sm border border-slate-200 group/next"
                                             >
-                                                Próximo Desafio →
+                                                Próxima Missão <ArrowRight className="w-4 h-4 group-hover/next:translate-x-1 transition-transform" />
                                             </button>
                                         )}
                                     </div>
@@ -338,7 +334,7 @@ const DeductiveSession: React.FC<DeductiveSessionProps> = ({ category, questions
                     </div>
                 </div>
 
-                {/* --- RIGHT COLUMN: Controls --- */}
+                {/* --- RIGHT COLUMN: Tactical Control --- */}
                 <div className="lg:col-span-4">
                     <ExamSidebar
                         timeLeft={timeLeft}

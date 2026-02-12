@@ -9,72 +9,77 @@ interface FAQProps {
 export const FAQ: React.FC<FAQProps> = ({ onLoginClick }) => {
     return (
         <>
-            {/* FAQ Section */}
-            <section id="faq" className="py-24 px-4 bg-[#F8FAFC]">
-                <div className="max-w-7xl mx-auto">
+            <section id="faq" className="py-24 px-6 bg-white relative overflow-hidden">
+                <div className="max-w-7xl mx-auto relative z-10">
                     <div className="text-center mb-16">
-                        <div className="text-primary-500 font-black uppercase tracking-widest text-xs mb-4">Dúvidas</div>
-                        <h2 className="text-4xl lg:text-5xl font-black text-navy-900 mb-4 tracking-tight leading-tight">
-                            Perguntas <span className="text-primary-500">Frequentes</span>
+                        <div className="text-aviation-primary font-black uppercase tracking-[0.3em] text-[10px] mb-4 flex items-center justify-center gap-3">
+                            <div className="w-8 h-px bg-aviation-slate-200" />
+                            Dúvidas Comuns
+                            <div className="w-8 h-px bg-aviation-slate-200" />
+                        </div>
+                        <h2 className="text-4xl lg:text-5xl font-black text-aviation-slate-900 elite-heading mb-6 uppercase tracking-tighter">
+                            Perguntas <span className="text-aviation-primary">Frequentes</span>
                         </h2>
-                        <p className="text-slate-500 text-lg font-medium">Tire suas dúvidas sobre a plataforma e a prova da ANAC.</p>
-                        <div className="w-20 h-1.5 bg-primary-500 mx-auto rounded-full mt-8"></div>
+                        <p className="text-aviation-slate-500 text-lg font-medium">Esclarecendo os fundamentos da sua jornada técnica.</p>
                     </div>
 
-                    <div className="grid md:grid-cols-2 gap-4 lg:gap-6">
+                    <div className="grid md:grid-cols-2 gap-4 lg:gap-6 max-w-5xl mx-auto">
                         <FAQItem
-                            question="Como funciona a prova da ANAC para Comissário de Voo?"
-                            answer="A prova é composta por 4 blocos de 20 questões cada (Emergências, Sobrevivência, Regulamentação e Conhecimentos Técnicos). Para ser aprovado, você precisa acertar pelo menos 14 questões (70%) em cada bloco individualmente."
+                            question="Como funciona a prova da ANAC?"
+                            answer="A prova é composta por 4 blocos técnicos de 20 questões cada (Emergências, Sobrevivência, Regulamentação e CGA). Para ser aprovado, você precisa de pelo menos 14 acertos (70%) em cada bloco."
                         />
                         <FAQItem
-                            question="O que é a 2ª Época e como funciona?"
-                            answer="Se você for reprovado em apenas um ou dois blocos, você pode fazer a 2ª época apenas dessas matérias. Se reprovar em três ou quatro, deverá realizar o exame completo novamente."
+                            question="O que é a 2ª Época?"
+                            answer="Se falhar em até dois blocos, você pode realizar a 2ª época apenas destas matérias. Falha em 3 ou 4 blocos exige nova realização do exame completo."
                         />
                         <FAQItem
-                            question="Os simulados são atualizados conforme a banca ANAC?"
-                            answer="Sim! Nosso banco de dados é monitorado e atualizado semanalmente com base nos relatos de alunos que realizaram a prova recentemente, garantindo que você estude o conteúdo que realmente cai."
+                            question="Os simulados são atualizados?"
+                            answer="Sim. Nossa equipe monitora semanalmente as atualizações da banca ANAC para garantir que o banco de questões esteja sempre alinhado com o conteúdo oficial."
                         />
                         <FAQItem
-                            question="Como funciona o pagamento e a liberação do acesso?"
-                            answer="O pagamento pode ser feito via Pix ou Cartão de Crédito. No Pix e Cartão, a liberação é imediata. Você receberá os dados de acesso no seu e-mail logo após a confirmação."
+                            question="Como funciona o acesso?"
+                            answer="A liberação é automática e imediata após a confirmação do pagamento via PIX ou Cartão. Você receberá os dados de acesso por e-mail."
                         />
                         <FAQItem
-                            question="Posso acessar de qualquer dispositivo?"
-                            answer="Sim! A VOOEI é totalmente responsiva. Você pode estudar pelo computador, tablet ou celular, em qualquer lugar, precisando apenas de uma conexão com a internet."
+                            question="Posso acessar pelo celular?"
+                            answer="Sim. A plataforma VOOEI é totalmente responsiva e otimizada para smartphones, tablets e desktops."
                         />
                         <FAQItem
-                            question="O que está incluso no criador de currículos?"
-                            answer="Você terá acesso a templates profissionais otimizados para RH de companhias aéreas. Basta preencher seus dados e o sistema gera o PDF pronto para envio, com dicas específicas para a área."
+                            question="O currículo está incluso?"
+                            answer="Sim. Oferecemos um gerador de currículos com templates otimizados para seleção em companhias aéreas."
                         />
                     </div>
                 </div>
             </section>
 
-            {/* Final CTA Section */}
-            <section className="py-24 px-4 bg-navy-900 relative overflow-hidden">
-                <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-primary-500/10 rounded-full blur-[100px] -z-0"></div>
-                <div className="absolute bottom-0 left-0 w-[300px] h-[300px] bg-blue-500/10 rounded-full blur-[80px] -z-0"></div>
+            <section className="py-32 px-6 bg-aviation-slate-50 relative overflow-hidden">
+                <div className="max-w-4xl mx-auto text-center relative z-10 space-y-10">
+                    <div className="w-20 h-20 bg-white rounded-3xl border border-aviation-slate-200 flex items-center justify-center mx-auto shadow-sm">
+                        <Plane className="w-10 h-10 text-aviation-primary transform -rotate-45" />
+                    </div>
 
-                <div className="max-w-4xl mx-auto text-center relative z-10">
-                    <Plane className="w-16 h-16 text-primary-500 mx-auto mb-8 animate-bounce" />
-                    <h2 className="text-4xl lg:text-6xl font-black text-white mb-8 leading-tight">
-                        Pronto para <span className="text-primary-500">Conquistar suas Asas</span>?
-                    </h2>
-                    <p className="text-xl text-slate-400 mb-12 leading-relaxed">
-                        Junte-se a milhares de comissários aprovados e comece sua jornada na aviação civil hoje mesmo.
-                    </p>
-                    <div className="flex flex-col sm:flex-row gap-6 justify-center">
+                    <div className="space-y-6">
+                        <h2 className="text-5xl lg:text-7xl font-black text-aviation-slate-900 elite-heading leading-tight uppercase tracking-tighter">
+                            Pronto para conquistar <br />
+                            <span className="text-aviation-primary">suas asas?</span>
+                        </h2>
+                        <p className="text-xl text-aviation-slate-500 font-medium max-w-2xl mx-auto">
+                            Junte-se a milhares de alunos aprovados e inicie seu treinamento com a melhor tecnologia do mercado.
+                        </p>
+                    </div>
+
+                    <div className="flex flex-col sm:flex-row gap-4 justify-center pt-6">
                         <button
                             onClick={() => onLoginClick('SIGNUP')}
-                            className="px-10 py-5 bg-primary-500 text-white rounded-full font-black text-xl hover:bg-primary-600 transition-all shadow-2xl shadow-primary-500/40 hover:scale-105 active:scale-95"
+                            className="bg-aviation-primary text-white px-10 py-5 rounded-2xl font-black text-[12px] uppercase tracking-widest hover:shadow-lg hover:shadow-aviation-primary/30 transition-all active:scale-95 shadow-md flex items-center justify-center gap-2"
                         >
-                            Começar Agora
+                            Começar Treinamento <ArrowRight className="w-5 h-5" />
                         </button>
                         <button
                             onClick={() => onLoginClick('LOGIN')}
-                            className="px-10 py-5 bg-white/5 text-white border-2 border-white/10 rounded-full font-black text-xl hover:bg-white/10 transition-all"
+                            className="bg-white text-aviation-slate-600 border border-aviation-slate-200 px-10 py-5 rounded-2xl font-black text-[12px] uppercase tracking-widest hover:bg-aviation-slate-50 transition-all text-center active:scale-95 shadow-sm"
                         >
-                            Já Tenho Conta
+                            Área do Aluno
                         </button>
                     </div>
                 </div>
@@ -87,18 +92,20 @@ const FAQItem = ({ question, answer }: { question: string, answer: string }) => 
     const [isOpen, setIsOpen] = useState(false);
 
     return (
-        <div className={`border rounded-2xl transition-all duration-300 ${isOpen ? 'border-primary-500 bg-primary-50/20 shadow-lg' : 'border-slate-200 bg-white hover:border-primary-200 shadow-sm'}`}>
+        <div className={`rounded-2xl transition-all duration-300 overflow-hidden border ${isOpen ? 'border-aviation-primary/30 bg-white shadow-md' : 'border-aviation-slate-200 bg-white hover:border-aviation-primary/20'}`}>
             <button
                 onClick={() => setIsOpen(!isOpen)}
-                className="w-full p-5 lg:p-6 flex items-center justify-between gap-4 text-left"
+                className="w-full p-6 flex items-center justify-between gap-4 text-left"
             >
-                <span className={`font-bold text-lg lg:text-xl tracking-tight ${isOpen ? 'text-primary-600' : 'text-navy-900'}`}>
+                <span className={`font-black text-sm uppercase tracking-tight transition-colors duration-300 ${isOpen ? 'text-aviation-primary' : 'text-aviation-slate-800'}`}>
                     {question}
                 </span>
-                <ChevronDown className={`w-5 h-5 transition-transform duration-300 flex-shrink-0 ${isOpen ? 'rotate-180 text-primary-500' : 'text-slate-400'}`} />
+                <div className={`p-2 rounded-lg transition-all duration-300 ${isOpen ? 'bg-aviation-primary/10 text-aviation-primary rotate-180' : 'bg-aviation-slate-50 text-aviation-slate-400'}`}>
+                    <ChevronDown className="w-5 h-5" />
+                </div>
             </button>
-            <div className={`overflow-hidden transition-all duration-300 ease-in-out ${isOpen ? 'max-h-96' : 'max-h-0'}`}>
-                <div className="p-5 lg:p-6 pt-0 text-slate-600 leading-relaxed text-base lg:text-lg border-t border-primary-100/50">
+            <div className={`overflow-hidden transition-all duration-500 ${isOpen ? 'max-h-60' : 'max-h-0'}`}>
+                <div className="p-6 pt-0 text-aviation-slate-500 text-sm font-medium border-t border-aviation-slate-50">
                     {answer}
                 </div>
             </div>

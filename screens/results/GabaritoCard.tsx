@@ -21,92 +21,105 @@ export const GabaritoCard: React.FC<GabaritoCardProps> = ({
     const correctIndex = question.correctIndex;
 
     return (
-        <div className="bg-white rounded-[2rem] shadow-sm border border-slate-200 overflow-hidden mb-6">
-            <div className="p-8 border-b border-slate-100 bg-slate-50/30">
-                <div className="flex items-center gap-2 mb-4">
-                    <span className="px-3 py-1 bg-navy-900 text-white text-[10px] font-black uppercase tracking-widest rounded-lg shadow-sm">
-                        Questão Oficial
+        <div className="bg-[#1E293B]/40 backdrop-blur-xl rounded-[3rem] border border-white/5 overflow-hidden mb-10 shadow-2xl group relative">
+            {/* Header Content */}
+            <div className="p-10 border-b border-white/5 bg-white/[0.02]">
+                <div className="flex items-center gap-4 mb-6">
+                    <span className="px-5 py-2 bg-cyan-500/10 text-cyan-400 text-[10px] font-black uppercase tracking-[0.3em] rounded-xl border border-cyan-500/20 shadow-lg">
+                        ESPECIFICAÇÃO TÉCNICA
                     </span>
                     {userAnswerIndex === correctIndex ? (
-                        <span className="px-3 py-1 bg-emerald-100 text-emerald-700 text-[10px] font-black uppercase tracking-widest rounded-lg">Você Acertou</span>
+                        <span className="px-5 py-2 bg-emerald-500/10 text-emerald-400 text-[10px] font-black uppercase tracking-[0.3em] rounded-xl border border-emerald-500/20 shadow-[0_0_15px_rgba(16,185,129,0.1)]">
+                            STATUS: CORRETO
+                        </span>
                     ) : (
-                        <span className="px-3 py-1 bg-rose-100 text-rose-700 text-[10px] font-black uppercase tracking-widest rounded-lg">Você Errou</span>
+                        <span className="px-5 py-2 bg-rose-500/10 text-rose-400 text-[10px] font-black uppercase tracking-[0.3em] rounded-xl border border-rose-500/20 shadow-[0_0_15px_rgba(244,63,94,0.1)]">
+                            STATUS: DIVERGENTE
+                        </span>
                     )}
                 </div>
-                <h2 className="text-xl font-black text-slate-800 tracking-tight leading-relaxed">
+                <h2 className="text-2xl font-black text-white tracking-tight leading-relaxed elite-heading">
                     {question.text}
                 </h2>
             </div>
 
-            <div className="p-8 space-y-4">
+            <div className="p-10 space-y-5">
                 {question.options.map((option, idx) => {
                     const isOptCorrect = idx === correctIndex;
                     const isOptSelected = idx === userAnswerIndex;
 
-                    let bgClass = "border-slate-100 bg-slate-50/20 opacity-40 grayscale-[0.5]";
-                    let letterClass = "bg-slate-200 text-slate-400";
+                    let bgClass = "border-white/5 bg-white/[0.02] opacity-40 grayscale-[0.8]";
+                    let letterClass = "bg-white/5 text-slate-500 border-white/5";
+                    let textClass = "text-slate-500";
                     let icon = null;
 
                     if (isOptCorrect) {
-                        bgClass = "border-emerald-500 bg-emerald-50/50 shadow-lg shadow-emerald-50 opacity-100";
-                        letterClass = "bg-emerald-500 text-white";
-                        icon = <Check className="w-5 h-5 text-emerald-600" strokeWidth={3} />;
+                        bgClass = "border-emerald-500/30 bg-emerald-500/5 opacity-100 shadow-[0_0_20px_rgba(16,185,129,0.05)]";
+                        letterClass = "bg-emerald-500 text-white border-emerald-400/20 shadow-[0_0_15px_rgba(16,185,129,0.3)]";
+                        textClass = "text-emerald-50";
+                        icon = <Check className="w-5 h-5 text-emerald-400" strokeWidth={3} />;
                     } else if (isOptSelected && !isOptCorrect) {
-                        bgClass = "border-rose-500 bg-rose-50 opacity-100";
-                        letterClass = "bg-rose-500 text-white";
-                        icon = <X className="w-5 h-5 text-rose-600" strokeWidth={3} />;
+                        bgClass = "border-rose-500/30 bg-rose-500/5 opacity-100 shadow-[0_0_20px_rgba(244,63,94,0.05)]";
+                        letterClass = "bg-rose-500 text-white border-rose-400/20 shadow-[0_0_15px_rgba(244,63,94,0.3)]";
+                        textClass = "text-rose-50";
+                        icon = <X className="w-5 h-5 text-rose-400" strokeWidth={3} />;
                     }
 
                     return (
                         <div
                             key={idx}
-                            className={`relative flex items-center p-5 rounded-2xl border-2 transition-all duration-500 ${bgClass}`}
+                            className={`relative flex items-center p-6 rounded-[2rem] border transition-all duration-700 ${bgClass}`}
                         >
-                            <div className={`w-11 h-11 rounded-xl flex items-center justify-center text-xl font-black flex-shrink-0 shadow-sm transition-all duration-500 ${letterClass}`}>
+                            <div className={`w-14 h-14 rounded-2xl flex items-center justify-center text-xl font-black flex-shrink-0 border transition-all duration-700 elite-heading ${letterClass}`}>
                                 {String.fromCharCode(65 + idx)}
                             </div>
 
-                            <span className={`flex-1 font-bold ml-5 text-base leading-snug ${isOptCorrect ? 'text-emerald-900' : 'text-slate-600'}`}>
+                            <span className={`flex-1 font-bold ml-6 text-lg leading-snug transition-colors duration-700 ${textClass}`}>
                                 {option}
                             </span>
 
-                            {icon && <div className="ml-3 animate-in zoom-in fade-in duration-300">{icon}</div>}
+                            {icon && <div className="ml-4 animate-[zoomIn_0.3s_ease-out]">{icon}</div>}
                         </div>
                     )
                 })}
             </div>
 
             {/* Smart Explanation Toggle */}
-            <div className="px-8 pb-8 pt-2">
+            <div className="px-10 pb-10 pt-2">
                 {!showExplanation ? (
                     <button
                         onClick={() => setShowExplanation(true)}
-                        className="w-full flex items-center justify-center gap-2 text-primary-600 font-black uppercase tracking-widest text-[10px] bg-primary-50 hover:bg-primary-100 p-4 rounded-xl transition-all duration-300"
+                        className="w-full flex items-center justify-center gap-3 text-cyan-400 font-black uppercase tracking-[0.3em] text-[10px] bg-cyan-500/5 hover:bg-cyan-500/10 border border-cyan-500/10 p-5 rounded-2xl transition-all duration-500 group/btn"
                     >
-                        <Eye className="w-4 h-4" /> Ver Análise Técnica do Gabarito
+                        <Eye className="w-5 h-5 group-hover/btn:scale-110 transition-transform" /> ANALISAR FUNDAMENTAÇÃO TÉCNICA
                     </button>
                 ) : (
-                    <div className="animate-fade-in-down">
-                        <div className="flex justify-between items-center mb-4">
-                            <div className="flex items-center gap-2 text-primary-700 font-black text-[10px] uppercase tracking-[0.2em]">
+                    <div className="animate-[slideDown_0.5s_ease-out]">
+                        <div className="flex justify-between items-center mb-6 px-2">
+                            <div className="flex items-center gap-3 text-cyan-500 font-black text-[10px] uppercase tracking-[0.4em]">
                                 <BookOpen className="w-4 h-4" />
-                                Gabarito Comentado
+                                DEBRIEFING TÉCNICO
                             </div>
                             <button
                                 onClick={() => setShowExplanation(false)}
-                                className="text-slate-400 hover:text-slate-600 text-[10px] font-black uppercase tracking-widest flex items-center gap-1.5 transition-colors"
+                                className="text-slate-500 hover:text-cyan-400 text-[10px] font-black uppercase tracking-widest flex items-center gap-2 transition-colors group/hide"
                             >
-                                <EyeOff className="w-3 h-3" /> Ocultar
+                                <EyeOff className="w-4 h-4 group-hover/hide:scale-90 transition-transform" /> OCULTAR ANALISE
                             </button>
                         </div>
-                        <div className="bg-primary-50/50 border border-primary-100 rounded-[2rem] p-6 shadow-sm ring-4 ring-primary-50/20">
-                            <p className="text-slate-700 leading-relaxed font-medium">
+                        <div className="bg-[#0F172C]/80 border border-cyan-500/20 rounded-[2.5rem] p-10 shadow-2xl relative overflow-hidden group/exp">
+                            {/* HUD Decor */}
+                            <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-tl from-cyan-500/5 to-transparent" />
+                            <p className="text-slate-400 leading-relaxed font-bold italic tracking-wide relative z-10">
                                 {question.explanation}
                             </p>
                         </div>
                     </div>
                 )}
             </div>
+
+            {/* Elite Corner Accent */}
+            <div className="absolute bottom-0 right-0 w-32 h-32 bg-gradient-to-tl from-cyan-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
         </div>
     );
 };

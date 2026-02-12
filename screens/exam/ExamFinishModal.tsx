@@ -17,36 +17,36 @@ export const ExamFinishModal: React.FC<ExamFinishModalProps> = ({
     onCancel
 }) => {
     return (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6">
-            <div className="absolute inset-0 bg-navy-950/60 backdrop-blur-md animate-in fade-in duration-300" onClick={onCancel} />
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-6">
+            <div className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm animate-fade-in" onClick={onCancel} />
 
-            <div className="bg-white rounded-[2.5rem] shadow-2xl p-8 sm:p-10 w-full max-w-md relative z-10 animate-in zoom-in-95 fade-in duration-300">
+            <div className="bg-white rounded-[3rem] shadow-2xl p-12 w-full max-w-lg relative z-10 border border-slate-200 animate-zoom-in">
                 <div className="flex flex-col items-center text-center">
-                    <div className="bg-amber-100 p-6 rounded-[2rem] mb-8 relative">
-                        <div className="absolute inset-0 bg-amber-500/20 rounded-[2rem] animate-ping opacity-20" />
-                        <AlertTriangle className="w-10 h-10 text-amber-600 relative z-10" />
+                    {/* Warning Icon */}
+                    <div className="bg-amber-50 p-8 rounded-[2.5rem] mb-10 border border-amber-100 relative group">
+                        <AlertTriangle className="w-12 h-12 text-amber-500 relative z-10" />
                     </div>
 
-                    <h3 className="text-2xl font-black text-navy-900 mb-4 tracking-tight">Finalizar Simulado?</h3>
+                    <h3 className="text-3xl font-black text-slate-800 mb-4 tracking-tighter uppercase elite-heading">Finalizar Simulado?</h3>
 
-                    <p className="text-slate-500 mb-8 font-medium leading-relaxed">
-                        Você concluiu <strong className="text-navy-900">{answeredCount}</strong> de <strong className="text-navy-900">{totalQuestions}</strong> questões até o momento. Tem certeza que deseja encerrar agora?
+                    <p className="text-slate-500 mb-10 font-bold leading-relaxed tracking-wide text-sm italic">
+                        Você concluiu <strong className="text-cyan-600 font-black not-italic">{answeredCount}</strong> de <strong className="text-slate-800 font-black not-italic">{totalQuestions}</strong> questões. Deseja encerrar sua sessão agora?
                     </p>
 
-                    <div className="flex flex-col w-full gap-3">
+                    <div className="flex flex-col w-full gap-4">
                         <Button
                             variant="primary"
                             onClick={onConfirm}
-                            className="w-full py-5 rounded-2xl bg-emerald-600 hover:bg-emerald-700 shadow-xl shadow-emerald-100"
+                            className="w-full py-6 rounded-2xl bg-cyan-600 hover:bg-cyan-700 shadow-md text-white font-black"
                         >
-                            Sim, Finalizar Prova
+                            SIM, FINALIZAR
                         </Button>
                         <Button
-                            variant="ghost"
+                            variant="outline"
                             onClick={onCancel}
-                            className="w-full py-4 text-slate-400 hover:text-slate-600 font-bold uppercase tracking-widest text-[10px]"
+                            className="w-full py-5 rounded-2xl border-slate-200 text-slate-500 hover:text-slate-800 hover:bg-slate-50 transition-colors"
                         >
-                            Continuar Respondendo
+                            CONTINUAR ESTUDANDO
                         </Button>
                     </div>
                 </div>

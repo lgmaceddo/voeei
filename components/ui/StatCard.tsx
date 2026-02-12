@@ -24,34 +24,34 @@ export const StatCard: React.FC<StatCardProps> = ({
 }) => {
     const variants = {
         primary: {
-            container: "bg-white border-slate-100",
-            icon: "bg-primary-50 text-primary-500",
-            value: "text-slate-800",
-            progress: "bg-primary-500"
+            container: "bg-[#1E293B]/40 border-white/5",
+            icon: "bg-cyan-500/10 text-cyan-400 border border-cyan-500/20 shadow-[0_0_15px_rgba(6,182,212,0.1)]",
+            value: "text-white",
+            progress: "bg-cyan-500 shadow-[0_0_10px_rgba(6,182,212,0.5)]"
         },
         success: {
-            container: "bg-emerald-50/30 border-emerald-100",
-            icon: "bg-emerald-100 text-emerald-600",
-            value: "text-emerald-700",
-            progress: "bg-emerald-500"
+            container: "bg-[#1E293B]/40 border-white/5",
+            icon: "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20",
+            value: "text-white",
+            progress: "bg-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.5)]"
         },
         error: {
-            container: "bg-rose-50/30 border-rose-100",
-            icon: "bg-rose-100 text-rose-500",
-            value: "text-rose-700",
-            progress: "bg-rose-500"
+            container: "bg-[#1E293B]/40 border-white/5",
+            icon: "bg-rose-500/10 text-rose-400 border border-rose-500/20",
+            value: "text-white",
+            progress: "bg-rose-500 shadow-[0_0_10px_rgba(244,63,94,0.5)]"
         },
         info: {
-            container: "bg-blue-50/30 border-blue-100",
-            icon: "bg-blue-100 text-blue-600",
-            value: "text-blue-700",
-            progress: "bg-blue-500"
+            container: "bg-[#1E293B]/40 border-white/5",
+            icon: "bg-cyan-500/10 text-cyan-400 border border-cyan-500/20",
+            value: "text-white",
+            progress: "bg-cyan-500 shadow-[0_0_10px_rgba(6,182,212,0.5)]"
         },
         glass: {
-            container: "bg-white/10 backdrop-blur-md border-white/10",
-            icon: "bg-white/20 text-white",
+            container: "bg-white/5 backdrop-blur-xl border-white/10 shadow-2xl",
+            icon: "bg-cyan-500/20 text-cyan-300 border border-cyan-500/30",
             value: "text-white",
-            progress: "bg-primary-500"
+            progress: "bg-cyan-500 shadow-[0_0_15px_rgba(6,182,212,0.6)]"
         }
     };
 
@@ -59,34 +59,34 @@ export const StatCard: React.FC<StatCardProps> = ({
 
     return (
         <div className={`
-            p-6 rounded-[2rem] border shadow-sm transition-all duration-300 group hover:shadow-xl hover:-translate-y-1
+            p-8 rounded-[3rem] border backdrop-blur-md shadow-xl transition-all duration-700 group hover:shadow-[0_20px_60px_rgba(6,182,212,0.1)] hover:-translate-y-2 hover:border-cyan-500/30
             ${style.container}
             ${className}
         `}>
-            <div className="flex justify-between items-start mb-4">
-                <div>
-                    <p className={`text-[10px] font-black uppercase tracking-[0.2em] opacity-60 mb-1 ${variant === 'glass' ? 'text-white/60' : 'text-slate-400'}`}>
+            <div className="flex justify-between items-start mb-6">
+                <div className="flex-1">
+                    <p className={`text-[10px] font-bold uppercase tracking-widest opacity-50 mb-3 truncate ${variant === 'glass' ? 'text-cyan-200' : 'text-slate-400'}`}>
                         {title}
                     </p>
-                    <div className="flex items-baseline gap-1">
-                        <span className={`text-3xl font-black tracking-tighter ${style.value}`}>{value}</span>
-                        {unit && <span className="text-xs font-bold text-slate-400 tracking-tight">{unit}</span>}
+                    <div className="flex items-baseline gap-2">
+                        <span className={`text-3xl lg:text-4xl font-black tracking-tighter elite-heading ${style.value}`}>{value}</span>
+                        {unit && <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest">{unit}</span>}
                     </div>
                 </div>
                 {icon && (
-                    <div className={`w-12 h-12 rounded-2x-large rounded-2xl flex items-center justify-center transition-transform duration-500 group-hover:scale-110 shadow-sm ${style.icon}`}>
+                    <div className={`w-14 h-14 rounded-2xl flex items-center justify-center transition-all duration-700 group-hover:scale-110 group-hover:shadow-[0_0_25px_rgba(6,182,212,0.3)] ${style.icon}`}>
                         {React.isValidElement(icon)
-                            ? React.cloneElement(icon as React.ReactElement<any>, { className: "w-6 h-6" })
+                            ? React.cloneElement(icon as React.ReactElement<any>, { className: "w-7 h-7" })
                             : icon}
                     </div>
                 )}
             </div>
 
             {progress !== undefined && (
-                <div className="mt-4">
-                    <div className="h-2 w-full bg-slate-100 rounded-full overflow-hidden shadow-inner ring-1 ring-slate-100/50">
+                <div className="mt-6">
+                    <div className="h-[6px] w-full bg-slate-800/50 rounded-full overflow-hidden border border-white/5 shadow-inner">
                         <div
-                            className={`h-full transition-all duration-1000 ease-out shadow-[0_0_10px_rgba(0,0,0,0.1)] ${style.progress}`}
+                            className={`h-full transition-all duration-[2000ms] ease-[cubic-bezier(0.23,1,0.32,1)] rounded-full ${style.progress}`}
                             style={{ width: `${progress}%` }}
                         />
                     </div>
@@ -94,7 +94,8 @@ export const StatCard: React.FC<StatCardProps> = ({
             )}
 
             {suffix && (
-                <div className={`mt-3 text-[10px] font-black uppercase tracking-widest opacity-60 ${variant === 'glass' ? 'text-white/60' : 'text-slate-400'}`}>
+                <div className={`mt-6 pt-5 border-t border-white/5 text-[9px] font-black text-slate-500 uppercase tracking-widest leading-relaxed flex items-center gap-2`}>
+                    <div className="w-1 h-3 bg-cyan-500/30 rounded-full" />
                     {suffix}
                 </div>
             )}

@@ -13,12 +13,12 @@ const ICON_MAP = {
 };
 
 const COLOR_MAP = {
-    BookOpen: { bg: 'bg-blue-50', icon: 'text-blue-500' },
-    Target: { bg: 'bg-orange-50', icon: 'text-orange-500' },
-    TrendingUp: { bg: 'bg-blue-50/50', icon: 'text-blue-400' },
-    Star: { bg: 'bg-orange-50/50', icon: 'text-orange-400' },
-    Brain: { bg: 'bg-blue-50', icon: 'text-blue-500' },
-    FileText: { bg: 'bg-orange-50', icon: 'text-orange-500' },
+    BookOpen: { bg: 'bg-cyan-50', icon: 'text-cyan-600' },
+    Target: { bg: 'bg-blue-50', icon: 'text-blue-600' },
+    TrendingUp: { bg: 'bg-emerald-50', icon: 'text-emerald-600' },
+    Star: { bg: 'bg-amber-50', icon: 'text-amber-600' },
+    Brain: { bg: 'bg-cyan-50', icon: 'text-cyan-600' },
+    FileText: { bg: 'bg-aviation-slate-50', icon: 'text-aviation-slate-600' },
 };
 
 interface FeaturesProps {
@@ -27,25 +27,29 @@ interface FeaturesProps {
 
 export const Features: React.FC<FeaturesProps> = ({ features }) => {
     return (
-        <section id="recursos" className="py-24 px-4 bg-[#F8FAFC]">
-            <div className="max-w-7xl mx-auto">
+        <section id="recursos" className="py-24 px-6 bg-white relative overflow-hidden">
+            <div className="max-w-7xl mx-auto relative z-10">
                 <div className="text-center mb-16">
-                    <div className="text-primary-500 font-black uppercase tracking-widest text-xs mb-4">Recursos Completos</div>
-                    <h2 className="text-4xl lg:text-5xl font-black text-navy-900 mb-6 tracking-tight leading-tight">
-                        Tudo que Você Precisa para <span className="text-blue-400">Ser Aprovado</span>
+                    <div className="text-aviation-primary font-black uppercase tracking-[0.3em] text-[10px] mb-4 flex items-center justify-center gap-3">
+                        <div className="w-8 h-px bg-aviation-slate-200" />
+                        Capacidades Técnicas
+                        <div className="w-8 h-px bg-aviation-slate-200" />
+                    </div>
+                    <h2 className="text-4xl lg:text-5xl font-black text-aviation-slate-900 elite-heading mb-6 tracking-tighter uppercase leading-none">
+                        Foco na sua <span className="text-aviation-primary">Aprovação</span>
                     </h2>
-                    <p className="text-slate-500 max-w-2xl mx-auto font-medium text-lg leading-relaxed">
-                        Ferramentas exclusivas desenvolvidas por especialistas em aviação civil para maximizar suas chances de aprovação.
+                    <p className="text-aviation-slate-500 max-w-2xl mx-auto font-medium text-lg leading-relaxed">
+                        Ferramentas projetadas com precisão para maximizar seu desempenho nas avaliações.
                     </p>
                 </div>
                 <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
                     {features.map((feature) => {
-                        const IconComponent = ICON_MAP[feature.icon];
-                        const colors = COLOR_MAP[feature.icon];
+                        const IconComponent = (ICON_MAP as any)[feature.icon] || FileText;
+                        const colors = (COLOR_MAP as any)[feature.icon] || COLOR_MAP.FileText;
                         return (
                             <FeatureCard
                                 key={feature.id}
-                                icon={<IconComponent className={`w-6 h-6 ${colors.icon}`} />}
+                                icon={<IconComponent className={`w-7 h-7 ${colors.icon}`} />}
                                 iconBg={colors.bg}
                                 title={feature.title}
                                 description={feature.description}
@@ -60,19 +64,20 @@ export const Features: React.FC<FeaturesProps> = ({ features }) => {
 };
 
 const FeatureCard = ({ icon, title, description, iconBg, badge }: any) => (
-    <div className="bg-white p-8 rounded-[32px] shadow-sm border border-slate-100 hover:shadow-xl transition-all hover:-translate-y-1 relative overflow-hidden group">
-        <div className={`w-14 h-14 rounded-2xl ${iconBg} flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-500`}>
+    <div className="bg-white p-8 rounded-[2rem] border border-aviation-slate-200 shadow-sm hover:shadow-md hover:border-aviation-primary/30 transition-all duration-300 relative overflow-hidden group h-full flex flex-col">
+        <div className={`w-14 h-14 rounded-2xl ${iconBg} flex items-center justify-center mb-8 border border-aviation-slate-50`}>
             {icon}
         </div>
+
         {badge && (
-            <div className="absolute top-0 right-10 bg-navy-900 text-white text-[10px] font-black px-4 py-2.5 rounded-b-2xl shadow-xl shadow-navy-900/20 border-x border-b border-white/5 uppercase tracking-widest animate-fade-in">
-                <div className="flex items-center gap-2">
-                    <div className="w-1 h-1 rounded-full bg-blue-400"></div>
-                    {badge}
-                </div>
+            <div className="absolute top-0 right-8 bg-aviation-primary/10 text-aviation-primary text-[8px] font-black px-4 py-2 rounded-b-xl border-x border-b border-aviation-primary/10 uppercase tracking-widest">
+                {badge}
             </div>
         )}
-        <h3 className="text-xl font-black text-navy-900 mb-4 tracking-tight">{title}</h3>
-        <p className="text-slate-500 font-medium leading-relaxed">{description}</p>
+
+        <div className="flex-1">
+            <h3 className="text-xl font-black text-aviation-slate-900 mb-4 elite-heading tracking-tighter uppercase group-hover:text-aviation-primary transition-colors">{title}</h3>
+            <p className="text-aviation-slate-500 font-medium leading-relaxed text-sm">{description}</p>
+        </div>
     </div>
 );

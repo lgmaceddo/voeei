@@ -18,7 +18,7 @@ interface LandingPageProps {
 
 const LandingPage: React.FC<LandingPageProps> = ({ onLoginClick, plans, features }) => {
     return (
-        <div className="min-h-screen bg-[#F8FAFC] selection:bg-primary-100 selection:text-primary-700 font-sans">
+        <div className="min-h-screen bg-aviation-slate-50 selection:bg-aviation-primary/20 selection:text-aviation-primary font-sans text-aviation-slate-800">
             <Navbar onLoginClick={onLoginClick} />
             <main>
                 <Hero onLoginClick={onLoginClick} />
